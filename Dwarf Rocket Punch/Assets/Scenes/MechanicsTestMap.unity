@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 207281058}
   - component: {fileID: 207281057}
   - component: {fileID: 207281056}
+  - component: {fileID: 207281060}
   m_Layer: 0
   m_Name: Dwarf
   m_TagString: Untagged
@@ -226,6 +227,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &207281060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 207281055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80822170769ed4a20b35fb7a0b75bc4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowMovement: 1
+  maxSpeed: 10
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,7 +327,6 @@ GameObject:
   - component: {fileID: 852234240}
   - component: {fileID: 852234242}
   - component: {fileID: 852234241}
-  - component: {fileID: 852234243}
   m_Layer: 0
   m_Name: Platform
   m_TagString: Untagged
@@ -405,17 +418,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &852234243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 852234239}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80822170769ed4a20b35fb7a0b75bc4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1355971036
 GameObject:
   m_ObjectHideFlags: 0
