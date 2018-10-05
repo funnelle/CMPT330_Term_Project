@@ -19,7 +19,7 @@ public class DwarfController : MonoBehaviour {
 	void Update () {
         if (allowMovement) {
             movementSpeed = Input.GetAxis("Horizontal");
-            rb2d.velocity = new Vector2(movementSpeed * maxSpeed, 0f);
+            rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
         }
     }
 }
