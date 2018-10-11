@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class LooseFollow : MonoBehaviour {
     public GameObject sceneController;
     public Vector3 offset;
-    public float HYSTERESIS = 10f;
+    public float HYSTERESIS = 2f;
 
     private Transform player;
     private SceneController sceneControllerScript;
