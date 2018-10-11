@@ -8,6 +8,7 @@ public class SceneController : MonoBehaviour {
     public CanvasGroup faderCanvasGroup;
     public float fadeDuration = 1f;
     public string startingSceneName = "MechanicsTestMap";
+    public string activeScene;
 
     private bool isFading;
 
@@ -52,6 +53,8 @@ public class SceneController : MonoBehaviour {
 
         Scene newlyLoadedScene = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
         SceneManager.SetActiveScene(newlyLoadedScene);
+        activeScene = newlyLoadedScene.name;
+
     }
 
     private IEnumerator Fade(float finalAlpha) {
