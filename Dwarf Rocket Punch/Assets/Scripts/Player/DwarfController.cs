@@ -2,8 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controls Dwarf (Player) movement and ground check
+/// </summary>
+/// 
+/// Field               Description
+/// *public*
+/// allowMovement       Boolean value that determines if the Dwarf is allowed to move
+/// onGround            Boolean value that determines if the Dwarf is on the ground
+/// groundCheckRadius   Radius of OverlapCircle for checking if touching ground
+/// maxSpeed            Speed of Dwarf's movement
+/// ground              LayerMask to determine what should be considered 'Ground'
+/// 
+/// *private*
+/// rb2d                Rigidbody2D of Dwarf body
+/// movementSpeed       Axis input value between -1 and 1 
+/// groundCheck         Transform position of OverlapCircle
+/// 
+/// Author: Evan Funnell (EVF)
+/// 
 public class DwarfController : MonoBehaviour {
-
     public bool allowMovement = true;
     public bool onGround = true;
     public float groundCheckRadius = 0.1f;
@@ -14,13 +32,23 @@ public class DwarfController : MonoBehaviour {
     private float movementSpeed;
     private Transform groundCheck;
 
-    // Use this for initialization
+    /// <summary>
+    /// Initialize variables at game start
+    /// </summary>
+    /// 
+    /// 2018-10-12  EVF     Initialized variables
+    /// 
     void Start() {
         rb2d = this.GetComponent<Rigidbody2D>();
         groundCheck = GameObject.Find("/Dwarf/GroundCheck").GetComponent<Transform>();
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Gets input and moves player
+    /// </summary>
+    /// 
+    /// 2018-10-12  EVF     Added movement code
+    /// 
     void Update() {
         if (allowMovement) {
             movementSpeed = Input.GetAxis("Horizontal");
@@ -28,6 +56,12 @@ public class DwarfController : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Checks for collisions with the ground to ell if player is 'grounded'
+    /// </summary>
+    /// 
+    /// 2018-10-12  EVF     Added ground check sphere
+    /// 
     void FixedUpdate() {
         //create a sphere that checks if we are on ground
         onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
