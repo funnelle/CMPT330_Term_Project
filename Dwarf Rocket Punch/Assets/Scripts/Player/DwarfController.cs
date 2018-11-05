@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,6 +31,7 @@ public class DwarfController : MonoBehaviour {
     private Rigidbody2D rb2d;
     private float movementSpeed;
     private Transform groundCheck;
+    //private Animator animator;
 
     /// <summary>
     /// Initialize variables at game start
@@ -41,6 +42,7 @@ public class DwarfController : MonoBehaviour {
     void Start() {
         rb2d = this.GetComponent<Rigidbody2D>();
         groundCheck = GameObject.Find("/Dwarf/GroundCheck").GetComponent<Transform>();
+        //animator = GameObejct.Find("/Dwarf/MainAnimationRig").GetComponent<Animator>();
     }
 
     /// <summary>
@@ -53,6 +55,7 @@ public class DwarfController : MonoBehaviour {
         if (allowMovement) {
             movementSpeed = Input.GetAxis("Horizontal");
             rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
+            // set animator.isRunning to true
         }
     }
 
