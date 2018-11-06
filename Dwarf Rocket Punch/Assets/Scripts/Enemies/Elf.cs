@@ -9,12 +9,14 @@ public class Elf : MonoBehaviour {
     [SerializeField] private float groundCheckRadius = 0.1f;
     [SerializeField] private LayerMask ground;
     [SerializeField] private float patrolSpeed = 3f;
-    [SerializeField] private float chaseSpeed = 6f;
+
+    public Transform[] patrolPoints;
 
     private Rigidbody2D rb2d;
     private BoxCollider2D boxCollider;
     private AudioSource audioSource;
     private Transform groundCheck;
+    private Transform current, target;
 
     // Use this for initialization
     void Start() {
@@ -33,15 +35,7 @@ public class Elf : MonoBehaviour {
 
     }
 
-    void Move() {
-
-    }
-
     void isGrounded() {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
-    }
-
-    void OnCollisionEnter2D(Collision2D collision) {
-        
     }
 }
