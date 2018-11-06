@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MechanicsTestMap.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/TestSceneGreyBox.unity
+    guid: fc916a4e9fb247a469f77ba8fc0d5dca
   m_configObjects: {}
