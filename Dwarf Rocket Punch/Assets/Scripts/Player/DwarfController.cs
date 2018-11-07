@@ -31,6 +31,7 @@ public class DwarfController : MonoBehaviour {
     private Rigidbody2D rb2d;
     private Transform groundCheck;
     private Animator mainAnimator;
+    private Animator armAnimator;
     private bool facingRight;
     private float movementSpeed;
 
@@ -44,6 +45,7 @@ public class DwarfController : MonoBehaviour {
         rb2d = this.GetComponent<Rigidbody2D>();
         groundCheck = GameObject.Find("/Dwarf/GroundCheck").GetComponent<Transform>();
         mainAnimator = GameObject.Find("/Dwarf/MainAnimationRig").GetComponent<Animator>();
+        armAnimator = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms/ArmAnimationRig").GetComponent<Animator>();
     }
 
     /// <summary>
@@ -51,12 +53,15 @@ public class DwarfController : MonoBehaviour {
     /// </summary>
     /// 
     /// 2018-10-12  EVF     Added movement code
+    /// 2018-11-7   EPM     Added mouse click code
     /// 
     void Update() {
         if (allowMovement) {
             movementSpeed = Input.GetAxis("Horizontal");
             rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
         }
+        //play arm animation on click
+        armAnimator.SetBool("onClick", Input.GetMouseButtonUp(0));
     }
 
     /// <summary>
@@ -95,7 +100,7 @@ public class DwarfController : MonoBehaviour {
     /// FLips the render of the character when the velocity parity flips (the player turns around)
     /// </summary>
     /// 
-    /// 2018-11-7 EPM       Added flip code
+    /// 2018-11-7   EPM     Added flip code
     /// 
     void Flip() {
         facingRight = !facingRight;
