@@ -23,7 +23,7 @@ public class SceneController : MonoBehaviour {
     public CanvasGroup faderCanvasGroup;
     public float fadeDuration = 1f;
     //public string startingSceneName = "MechanicsTestMap";
-    public string startingSceneName = "TestSceneGreyBox";
+    public string startingSceneName = "TestLevel";
     public string activeScene;
 
     private bool isFading;
