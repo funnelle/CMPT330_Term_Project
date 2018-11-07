@@ -19,7 +19,8 @@ using UnityEngine;
 /// movementSpeed       Axis input value between -1 and 1 
 /// groundCheck         Transform position of OverlapCircle
 /// 
-/// Author: Evan Funnell (EVF)
+/// Author: Evan Funnell        (EVF)
+/// Editor: Eamonn McCormick    (EPM)
 /// 
 public class DwarfController : MonoBehaviour {
     public bool allowMovement = true;
@@ -40,6 +41,7 @@ public class DwarfController : MonoBehaviour {
     /// </summary>
     /// 
     /// 2018-10-12  EVF     Initialized variables
+    /// 2018-11-6   EPM     added animators
     /// 
     void Start() {
         rb2d = this.GetComponent<Rigidbody2D>();
@@ -69,6 +71,8 @@ public class DwarfController : MonoBehaviour {
     /// </summary>
     /// 
     /// 2018-10-12  EVF     Added ground check sphere
+    /// 2018-11-5   EPM     Added if/else to check velocity to animate character
+    /// 2018-11-6   EPM     Added calls to flip function when character turns
     /// 
     void FixedUpdate() {
         //create a sphere that checks if we are on ground
