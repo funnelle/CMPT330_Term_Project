@@ -15,6 +15,7 @@ using UnityEngine;
 public class TrackMouse : MonoBehaviour {
     private Vector3 mouseLocation;
     private Vector2 armDirection;
+    public static int directionModifier = 1;
 
 	/// <summary>
     /// Gets mouse position, coverts to world space and points arm at mouse position
@@ -26,7 +27,7 @@ public class TrackMouse : MonoBehaviour {
         mouseLocation = Input.mousePosition;
         mouseLocation = Camera.main.ScreenToWorldPoint(mouseLocation);
 
-        armDirection = new Vector2(mouseLocation.x - transform.position.x, mouseLocation.y - transform.position.y);
+        armDirection = new Vector2(mouseLocation.x - transform.position.x, mouseLocation.y - transform.position.y)*directionModifier;
 
         transform.right = armDirection;
 	}
