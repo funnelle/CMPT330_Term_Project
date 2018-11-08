@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(TrackMouse))]
 public class DwarfRocketFire : MonoBehaviour
 {
-
+    private TrackMouse MouseTracker;
     //Punch speed + range
     public float punchRange = 5f;
     public float punchDelay = 0.15f;
@@ -28,6 +29,9 @@ public class DwarfRocketFire : MonoBehaviour
     private void Start()
     {
         gauntletLocation = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms/Gauntlet").GetComponent<Transform>();
+        dwarfPunch.origin = gauntletLocation.position;
+        Physics2D.queriesStartInColliders = false;
+        MouseTracker = GetComponent<TrackMouse>();
     }
 
     /// <summary>
@@ -40,6 +44,7 @@ public class DwarfRocketFire : MonoBehaviour
         timeSinceFire += Time.deltaTime;
         if (Input.GetButton("Fire1") && timeSinceFire >= punchDelay)
         {
+            print("Fire!");
             Punch();
         }
     }
@@ -53,10 +58,10 @@ public class DwarfRocketFire : MonoBehaviour
     {
         timeSinceFire = 0f;
         //reset our punch time
-        dwarfPunch.origin = gauntletLocation.position;
-        dwarfPunch.direction = gauntletLocation.forward;
+        dwarfPunch.origin = this.transform.position;
+        dwarfPunch.direction = MouseTracker.armDirection;
         //Get our location
-        hitCheck = Physics2D.Raycast(dwarfPunch.origin, dwarfPunch.direction, punchRange, playerLayer);
+        hitCheck = Physics2D.Raycast(dwarfPunch.origin, dwarfPunch.direction, punchRange);
         if (hitCheck.collider != null)
         {
             print("We've hit something");
@@ -86,11 +91,11 @@ public class DwarfRocketFire : MonoBehaviour
     void DwarfExplode(Rigidbody2D expVictim, float explosionForce, Vector2 explosionPos, float explosionRadius)
     {
         Vector2 ExpDir = (Vector2)expVictim.transform.position - explosionPos;
-        //ExpDir = ExpDir.normalized;
+        ExpDir = ExpDir.normalized;
         float explosionDistance = Vector2.Distance(explosionPos, ExpDir);
         float explosionStrength = 1f - (explosionDistance / explosionRadius);
 
-        expVictim.AddForce(ExpDir * (explosionStrength * explosionForce), ForceMode2D.Impulse);
-        //Impulse applies force instantly. Better suited for explosions.
+        expVictim.velocity=(ExpDir * (explosionStrength * explosionForce));
+        //Tell the engine to simply shove them in our desired direction, no fuss.
     }
 }

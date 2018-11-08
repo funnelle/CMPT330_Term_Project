@@ -14,7 +14,7 @@ using UnityEngine;
 /// 
 public class TrackMouse : MonoBehaviour {
     private Vector3 mouseLocation;
-    private Vector2 armDirection;
+    public Vector2 armDirection;
     public static int directionModifier = 1;
 
 	/// <summary>
