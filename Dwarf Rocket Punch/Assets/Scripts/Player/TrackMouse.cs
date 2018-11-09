@@ -9,10 +9,8 @@ using UnityEngine;
 /// Field           Description
 /// mouseLocation   Vector3 position of the mouse in the game
 /// armDirection    Vector2 position that points the arm at mouseLocation
-/// dirctionMod..   int modifier that changes direction of vector when character turns around
 /// 
-/// Author: Evan Funnell        (EVF)
-/// Editor: Eamonn McCormick    (EPM)
+/// Author: Evan Funnell (EVF)
 /// 
 public class TrackMouse : MonoBehaviour {
     private Vector3 mouseLocation;
@@ -24,7 +22,6 @@ public class TrackMouse : MonoBehaviour {
     /// </summary>
     /// 
     /// 2018-10-12  EVF     Added basic functionality
-    /// 2018-11-7   EPM     Added direction modifier multiplication to handle character turning
     /// 
 	void Update () {
         mouseLocation = Input.mousePosition;
