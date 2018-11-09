@@ -61,7 +61,10 @@ public class DwarfController : MonoBehaviour {
             rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
         }
         //play arm animation on click
-        armAnimator.SetBool("onClick", Input.GetMouseButtonUp(0));
+        if (Input.GetMouseButtonUp(0)) {
+            armAnimator.Play("Dwarf_arm_blast_1");
+        }
+        //armAnimator.SetBool("onClick", Input.GetMouseButtonUp(0));
     }
 
     /// <summary>
