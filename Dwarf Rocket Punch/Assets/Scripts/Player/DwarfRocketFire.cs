@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(TrackMouse))]
 public class DwarfRocketFire : MonoBehaviour
 {
     private TrackMouse MouseTracker;
     //Punch speed + range
-    public float punchRange = 5f;
+    public float punchRange = 15f;
     public float punchDelay = 0.15f;
 
     //Explosion size + force
@@ -28,10 +27,8 @@ public class DwarfRocketFire : MonoBehaviour
     /// EW 2018-11-07
     private void Start()
     {
-        gauntletLocation = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms/Gauntlet").GetComponent<Transform>();
-        dwarfPunch.origin = gauntletLocation.position;
         Physics2D.queriesStartInColliders = false;
-        MouseTracker = GetComponent<TrackMouse>();
+        MouseTracker = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms/").GetComponent<TrackMouse>();
     }
 
     /// <summary>
