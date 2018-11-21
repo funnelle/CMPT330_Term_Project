@@ -14,6 +14,7 @@ using UnityEngine;
 /// groundCheckRadius   Radius of OverlapCircle for checking if touching ground
 /// maxSpeed            Speed of Dwarf's movement
 /// jumpForce           The force of the Dwarf's jumps
+/// slideTime           How long the dwarf can stick to a wall before unable to wall jump
 /// ground              LayerMask to determine what should be considered 'Ground'
 /// 
 /// *private*
@@ -22,6 +23,8 @@ using UnityEngine;
 /// groundCheck         Transform position of OverlapCircle
 /// 
 /// Author: Evan Funnell (EVF)
+///         Eamonn McCormick (EPM)
+///         Ryan Dykstra (RJD)
 /// 
 public class DwarfController : MonoBehaviour {
     public bool allowMovement = true;
@@ -30,6 +33,7 @@ public class DwarfController : MonoBehaviour {
     public float groundCheckRadius = 0.1f;
     public float maxSpeed = 10f;
     public float jumpForce = 750f;
+    public float slideTime = 0.5f;
     public LayerMask ground;
 
     private Rigidbody2D rb2d;
@@ -58,6 +62,7 @@ public class DwarfController : MonoBehaviour {
     /// 
     /// 2018-10-12  EVF     Added movement code
     /// 2018-11-7   EPM     Added mouse click code
+    /// 2018-11-20  RJD     Added wall jump code
     /// 
     void Update() {
         if (allowMovement) {
@@ -83,7 +88,7 @@ public class DwarfController : MonoBehaviour {
     }
 
     /// <summary>
-    /// Checks for collisions with the ground to ell if player is 'grounded'
+    /// Checks for collisions with the ground to tell if player is 'grounded'
     /// </summary>
     /// 
     /// 2018-10-12  EVF     Added ground check sphere
@@ -130,15 +135,55 @@ public class DwarfController : MonoBehaviour {
         TrackMouse.directionModifier *= -1;
     }
 
+    /// <summary>
+    /// Performs actions after a collision
+    /// </summary>
+    /// <param name="collision">
+    /// A collider
+    /// </param>
+    /// 
+    /// 2018-11-20 RJD      Added wall jump code
+    /// 
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Wall")
+        {
             allowWallJump = true;
+            StopAllCoroutines();
+            IEnumerator coroutine = cancelWallJump(slideTime);
+            StartCoroutine(coroutine);
+        }
     }
 
+    /// <summary>
+    /// Performs actions after ceasing contact with a collider
+    /// </summary>
+    /// <param name="collision">
+    /// A collider
+    /// </param>
+    /// 
+    /// 2018-11-20      Added wall jump code
+    /// 
     void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Wall")
             allowWallJump = false;
+    }
+
+    /// <summary>
+    /// Coroutine to take away the ability to wall jump after sticking to a wall for a period of time
+    /// </summary>
+    /// <param name="slideTime">
+    /// The amount of time before wall jump is disabled
+    /// </param>
+    /// <returns>
+    /// A WaitForSeconds()
+    /// </returns>
+    /// 
+    /// 2018-11-20      Added basic wall jump cancelling
+    /// 
+    private IEnumerator cancelWallJump(float slideTime) {
+        yield return new WaitForSeconds(slideTime);
+        allowWallJump = false;
     }
 }

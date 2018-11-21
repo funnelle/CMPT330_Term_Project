@@ -457,6 +457,7 @@ MonoBehaviour:
   groundCheckRadius: 0.1
   maxSpeed: 10
   jumpForce: 750
+  slideTime: 0.5
   ground:
     serializedVersion: 2
     m_Bits: 256
