@@ -10,8 +10,10 @@ using UnityEngine;
 /// *public*
 /// allowMovement       Boolean value that determines if the Dwarf is allowed to move
 /// onGround            Boolean value that determines if the Dwarf is on the ground
+/// allowWallJump       Boolean value that determines if the Dwarf is allowed to wall jump
 /// groundCheckRadius   Radius of OverlapCircle for checking if touching ground
 /// maxSpeed            Speed of Dwarf's movement
+/// jumpForce           The force of the Dwarf's jumps
 /// ground              LayerMask to determine what should be considered 'Ground'
 /// 
 /// *private*
@@ -24,8 +26,10 @@ using UnityEngine;
 public class DwarfController : MonoBehaviour {
     public bool allowMovement = true;
     public bool onGround = true;
+    public bool allowWallJump = false;
     public float groundCheckRadius = 0.1f;
     public float maxSpeed = 10f;
+    public float jumpForce = 750f;
     public LayerMask ground;
 
     private Rigidbody2D rb2d;
@@ -59,6 +63,20 @@ public class DwarfController : MonoBehaviour {
         if (allowMovement) {
             movementSpeed = Input.GetAxis("Horizontal");
             rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
+        }
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            if (onGround == true)
+            {
+                rb2d.AddForce(Vector2.up * jumpForce);
+            }
+            else if (allowWallJump == true)
+            {
+                rb2d.velocity = new Vector2(0, 0);
+                rb2d.AddForce(Vector2.up * jumpForce);
+                allowWallJump = false;
+            }
         }
         //play arm animation on click
         armAnimator.SetBool("onClick", Input.GetMouseButtonUp(0));
@@ -110,5 +128,17 @@ public class DwarfController : MonoBehaviour {
         transform.localScale = mainScale;
         //flips parity of mouse track vector so that shoulder does not track mouse when player turns
         TrackMouse.directionModifier *= -1;
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Wall")
+            allowWallJump = true;
+    }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Wall")
+            allowWallJump = false;
     }
 }

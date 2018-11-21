@@ -453,8 +453,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allowMovement: 1
   onGround: 1
+  allowWallJump: 0
   groundCheckRadius: 0.1
   maxSpeed: 10
+  jumpForce: 750
   ground:
     serializedVersion: 2
     m_Bits: 256
@@ -765,8 +767,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 852234239}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.155, y: 5.98, z: 0}
-  m_LocalScale: {x: 0.35430002, y: 0.96799994, z: 1}
+  m_LocalPosition: {x: 0.1283, y: 5.991, z: 0}
+  m_LocalScale: {x: 0.4077639, y: 0.9467039, z: 1}
   m_Children: []
   m_Father: {fileID: 1636409830}
   m_RootOrder: 3
@@ -1008,7 +1010,7 @@ GameObject:
   - component: {fileID: 1355971040}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1020,8 +1022,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1355971036}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0492, y: 8.423, z: 0}
-  m_LocalScale: {x: 0.055127602, y: 5.9298954, z: 1}
+  m_LocalPosition: {x: -0.04676, y: 8.923, z: 0}
+  m_LocalScale: {x: 0.057864763, y: 4.9008927, z: 1}
   m_Children: []
   m_Father: {fileID: 1636409830}
   m_RootOrder: 1
@@ -1292,7 +1294,7 @@ GameObject:
   - component: {fileID: 1745927198}
   m_Layer: 0
   m_Name: Wall 2
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
