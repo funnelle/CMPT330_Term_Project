@@ -6,8 +6,8 @@ public class DwarfRocketFire : MonoBehaviour
 {
     private TrackMouse MouseTracker;
     //Punch speed + range
-    public float punchRange = 15f;
-    public float punchDelay = 0.15f;
+    public float punchRange = 20f;
+    public float punchDelay = 1.5f;
 
     //Explosion size + force
     public float explosionRadius = 50f;
@@ -90,7 +90,8 @@ public class DwarfRocketFire : MonoBehaviour
         Vector2 ExpDir = (Vector2)expVictim.transform.position - explosionPos;
         ExpDir = ExpDir.normalized;
         float explosionDistance = Vector2.Distance(explosionPos, ExpDir);
-        float explosionStrength = 1f - (explosionDistance / explosionRadius);
+        Debug.Log(explosionDistance);
+        float explosionStrength = 1f;
 
         expVictim.velocity=(ExpDir * (explosionStrength * explosionForce));
         //Tell the engine to simply shove them in our desired direction, no fuss.
