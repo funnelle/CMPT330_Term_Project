@@ -32,6 +32,7 @@ public class DwarfController : MonoBehaviour {
     private Transform groundCheck;
     private Animator mainAnimator;
     private Animator armAnimator;
+    private List<SpriteRenderer> sprites;
     private bool facingRight;
     private float movementSpeed;
 
@@ -46,6 +47,16 @@ public class DwarfController : MonoBehaviour {
         groundCheck = GameObject.Find("/Dwarf/GroundCheck").GetComponent<Transform>();
         mainAnimator = GameObject.Find("/Dwarf/MainAnimationRig").GetComponent<Animator>();
         armAnimator = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms/ArmAnimationRig").GetComponent<Animator>();
+
+        //Collect our sprites for our flip function. Then we can go through them and flip them as needed.
+        GameObject[] temp = GameObject.FindGameObjectsWithTag("PlayerSprite");
+        Debug.Log(temp[0]);
+        for(int i = 0; i < temp.Length; i++)
+        {
+            SpriteRenderer spriteTemp = temp[i].GetComponent<SpriteRenderer>();
+            sprites.Add(spriteTemp);
+            Debug.Log(sprites[0]);
+        }
     }
 
     /// <summary>
@@ -104,10 +115,21 @@ public class DwarfController : MonoBehaviour {
     /// 
     void Flip() {
         facingRight = !facingRight;
+        foreach (SpriteRenderer sprite in sprites)
+        {
+            if(sprite.flipX == true)
+            {
+                sprite.flipX = false;
+            }
+            else
+            {
+                sprite.flipX = true;
+            }
+        }  
         //flips parity of x-axis render, flipping the character around
-        Vector3 mainScale = transform.localScale;
+       /* Vector3 mainScale = transform.localScale;
         mainScale.x *= -1;
-        transform.localScale = mainScale;
+        transform.localScale = mainScale; */
         //flips parity of mouse track vector so that shoulder does not track mouse when player turns
         TrackMouse.directionModifier *= -1;
     }

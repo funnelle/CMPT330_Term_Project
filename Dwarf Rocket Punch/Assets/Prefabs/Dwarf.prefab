@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212047517829454024}
   m_Layer: 9
   m_Name: Front_leg_lower
-  m_TagString: Untagged
+  m_TagString: PlayerSprite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 212222115388257588}
   m_Layer: 9
   m_Name: Back_leg_upper
-  m_TagString: Untagged
+  m_TagString: PlayerSprite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 212255442196345300}
   m_Layer: 9
   m_Name: Arm_upper
-  m_TagString: Untagged
+  m_TagString: PlayerSprite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 212560485785997946}
   m_Layer: 9
   m_Name: Torso
-  m_TagString: Untagged
+  m_TagString: PlayerSprite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 212155107643812426}
   m_Layer: 9
   m_Name: Arm_lower
-  m_TagString: Untagged
+  m_TagString: PlayerSprite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 212437273621923238}
   m_Layer: 9
   m_Name: Head
-  m_TagString: Untagged
+  m_TagString: PlayerSprite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 212712137409006504}
   m_Layer: 9
   m_Name: Back_leg_lower
-  m_TagString: Untagged
+  m_TagString: PlayerSprite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -200,7 +200,7 @@ GameObject:
   - component: {fileID: 212003395129536428}
   m_Layer: 9
   m_Name: Front_leg_upper
-  m_TagString: Untagged
+  m_TagString: PlayerSprite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 212684653009711550}
   m_Layer: 9
   m_Name: Beard
-  m_TagString: Untagged
+  m_TagString: PlayerSprite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -232,7 +232,7 @@ GameObject:
   - component: {fileID: 95165238049396700}
   m_Layer: 9
   m_Name: ArmAnimationRig
-  m_TagString: Untagged
+  m_TagString: PlayerSprite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -246,7 +246,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4221481775991044}
   - component: {fileID: 114283844632157336}
-  - component: {fileID: 114583564868243302}
   m_Layer: 9
   m_Name: Arms
   m_TagString: Untagged
@@ -591,22 +590,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   armDirection: {x: 0, y: 0}
---- !u!114 &114583564868243302
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1878687160571922}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b43a6737df222914d9ddf19b991b6c0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  punchRange: 5
-  punchDelay: 0.15
-  explosionRadius: 50
-  explosionForce: 25
-  dwarfUplift: 35
 --- !u!114 &114584205443496590
 MonoBehaviour:
   m_ObjectHideFlags: 1
