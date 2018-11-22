@@ -46,6 +46,7 @@ public class DwarfController : MonoBehaviour {
     //Dwarf Movement Variables
     public bool allowMovement = true;
     public bool onGround = true;
+    public bool isRocketJumping;
     public float groundCheckRadius = 0.1f;
     public float maxSpeed = 10f;
     public LayerMask ground;
@@ -129,7 +130,7 @@ public class DwarfController : MonoBehaviour {
     void FixedUpdate() {
         //create a sphere that checks if we are on ground
         onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
-
+        
         if (Mathf.Abs(rb2d.velocity.x) > 0.01f) {
             mainAnimator.SetBool("isRunning", true);
         }
@@ -186,6 +187,7 @@ public class DwarfController : MonoBehaviour {
     /// EW 2018-11-07
     void Punch()
     {
+        allowMovement = false;
         timeSinceFire = 0f;
         //reset our punch time
         dwarfPunch.origin = dwarfPunchOrigin.position;
