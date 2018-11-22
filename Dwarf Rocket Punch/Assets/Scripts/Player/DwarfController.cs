@@ -32,7 +32,7 @@ public class DwarfController : MonoBehaviour {
     public bool allowWallJump = false;
     public float groundCheckRadius = 0.1f;
     public float maxSpeed = 10f;
-    public float jumpForce = 750f;
+    public float jumpForce = 20f;
     public float slideTime = 0.5f;
     public LayerMask ground;
 
@@ -65,25 +65,12 @@ public class DwarfController : MonoBehaviour {
     /// 2018-11-20  RJD     Added wall jump code
     /// 
     void Update() {
-        if (allowMovement) {
+        if (allowMovement)
+        {
             movementSpeed = Input.GetAxis("Horizontal");
             rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
         }
 
-        if (Input.GetButtonDown("Jump"))
-        {
-            if (onGround == true)
-            {
-                rb2d.AddForce(Vector2.up * jumpForce);
-            }
-            else if (allowWallJump == true)
-            {
-                rb2d.velocity = new Vector2(0, 0);
-                rb2d.AddForce(Vector2.up * jumpForce);
-                allowWallJump = false;
-            }
-        }
-        //play arm animation on click
         armAnimator.SetBool("onClick", Input.GetMouseButtonUp(0));
     }
 
@@ -96,6 +83,31 @@ public class DwarfController : MonoBehaviour {
     void FixedUpdate() {
         //create a sphere that checks if we are on ground
         onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
+        if (onGround)
+            allowMovement = true;
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            if (onGround)
+            {
+                rb2d.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            }
+
+            else if (allowWallJump)
+            {
+                if (facingRight == true)
+                {
+                    allowMovement = false;
+                    rb2d.AddForce(new Vector2(-jumpForce, jumpForce), ForceMode2D.Impulse);
+                }
+                if (facingRight == false)
+                {
+                    allowMovement = false;
+                    rb2d.AddForce(new Vector2(jumpForce, jumpForce), ForceMode2D.Impulse);
+                }
+                allowWallJump = false;
+            }
+        }
 
         if (Mathf.Abs(rb2d.velocity.x) > 0.01f) {
             mainAnimator.SetBool("isRunning", true);
