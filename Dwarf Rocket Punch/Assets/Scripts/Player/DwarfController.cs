@@ -32,7 +32,7 @@ public class DwarfController : MonoBehaviour {
     private Transform groundCheck;
     private Animator mainAnimator;
     private Animator armAnimator;
-    private List<SpriteRenderer> sprites;
+    private GameObject[] spriteObjects;
     private bool facingRight;
     private float movementSpeed;
 
@@ -42,22 +42,17 @@ public class DwarfController : MonoBehaviour {
     /// 
     /// 2018-10-12  EVF     Initialized variables
     /// 
-    void Start() {
+    void Start()
+    {
         rb2d = this.GetComponent<Rigidbody2D>();
         groundCheck = GameObject.Find("/Dwarf/GroundCheck").GetComponent<Transform>();
         mainAnimator = GameObject.Find("/Dwarf/MainAnimationRig").GetComponent<Animator>();
         armAnimator = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms/ArmAnimationRig").GetComponent<Animator>();
 
         //Collect our sprites for our flip function. Then we can go through them and flip them as needed.
-        GameObject[] temp = GameObject.FindGameObjectsWithTag("PlayerSprite");
-        Debug.Log(temp[0]);
-        for(int i = 0; i < temp.Length; i++)
-        {
-            SpriteRenderer spriteTemp = temp[i].GetComponent<SpriteRenderer>();
-            sprites.Add(spriteTemp);
-            Debug.Log(sprites[0]);
-        }
+        spriteObjects = GameObject.FindGameObjectsWithTag("PlayerSprite");
     }
+        
 
     /// <summary>
     /// Gets input and moves player
@@ -115,15 +110,15 @@ public class DwarfController : MonoBehaviour {
     /// 
     void Flip() {
         facingRight = !facingRight;
-        foreach (SpriteRenderer sprite in sprites)
+        foreach (GameObject spriteObject in spriteObjects)
         {
-            if(sprite.flipX == true)
+            if(spriteObject.GetComponent<SpriteRenderer>().flipX == true)
             {
-                sprite.flipX = false;
+                spriteObject.GetComponent<SpriteRenderer>().flipX = false;
             }
             else
             {
-                sprite.flipX = true;
+                spriteObject.GetComponent<SpriteRenderer>().flipX = true;
             }
         }  
         //flips parity of x-axis render, flipping the character around

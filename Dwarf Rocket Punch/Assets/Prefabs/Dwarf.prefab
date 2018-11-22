@@ -232,7 +232,7 @@ GameObject:
   - component: {fileID: 95165238049396700}
   m_Layer: 9
   m_Name: ArmAnimationRig
-  m_TagString: PlayerSprite
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
