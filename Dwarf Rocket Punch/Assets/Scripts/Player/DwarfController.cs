@@ -94,17 +94,19 @@ public class DwarfController : MonoBehaviour {
             }
 
             else if (allowWallJump)
+
             {
-                if (facingRight == true)
-                {
+                if (!facingRight)
+                {                    
                     allowMovement = false;
-                    rb2d.AddForce(new Vector2(-jumpForce, jumpForce), ForceMode2D.Impulse);
+                    rb2d.AddForce(new Vector2(-jumpForce/2, jumpForce), ForceMode2D.Impulse);
                 }
-                if (facingRight == false)
-                {
+                if (facingRight)
+                {                    
                     allowMovement = false;
-                    rb2d.AddForce(new Vector2(jumpForce, jumpForce), ForceMode2D.Impulse);
+                    rb2d.AddForce(new Vector2(jumpForce/2, jumpForce), ForceMode2D.Impulse);
                 }
+
                 allowWallJump = false;
             }
         }
