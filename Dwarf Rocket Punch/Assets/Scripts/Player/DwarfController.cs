@@ -22,11 +22,27 @@ using UnityEngine;
 /// Author: Evan Funnell (EVF)
 /// 
 public class DwarfController : MonoBehaviour {
+    //Punch speed + range
+    public float punchRange = 20f;
+    public float punchDelay = 1.5f;
+
+    //Explosion size + force
+    public float explosionRadius = 50f;
+    public float explosionForce = 25f;
+    public float dwarfUplift = 35f;
+
+    //Firing variables, raycasts and checks
+    private float timeSinceFire;
+    private RaycastHit2D hitCheck;
+    private Ray2D dwarfPunch;
+    private Transform dwarfPunchOrigin;
+
     //Mouse Tracking Variables
     private Vector3 mouseLocation;
     public Vector2 armDirection;
     public static int directionModifier = 1;
     private Transform dwarfArm;
+
     //Dwarf Movement Variables
     public bool allowMovement = true;
     public bool onGround = true;
@@ -53,12 +69,23 @@ public class DwarfController : MonoBehaviour {
     /// 
     void Start()
     {   
-        //Get the components we need for moving and animating the player
+        //Let his punches leave his own collider
+        Physics2D.queriesStartInColliders = false;
+        
+        //Get the components we need for moving the player
         rb2d = this.GetComponent<Rigidbody2D>();
         groundCheck = GameObject.Find("/Dwarf/GroundCheck").GetComponent<Transform>();
+        
+        //Get the componenets we need for animation the player
         mainAnimator = GameObject.Find("/Dwarf/MainAnimationRig").GetComponent<Animator>();
         armAnimator = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms/ArmAnimationRig").GetComponent<Animator>();
+        
+        //Get the component we need to change with mouse direction
         dwarfArm = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms").GetComponent<Transform>();
+
+        //Get the component that is the origin of the dwarf's punch raycast.
+        dwarfPunchOrigin = GameObject.Find("/Dwarf/RocketLocation/").GetComponent<Transform>();
+
         //Collect our sprites for our flip function. Then we can go through them and flip them as needed.
         spriteObjects = GameObject.FindGameObjectsWithTag("PlayerSprite");
     }
@@ -72,11 +99,18 @@ public class DwarfController : MonoBehaviour {
     /// 2018-11-7   EPM     Added mouse click code
     /// 
     void Update() {
+        //Let the player move, if possible.
         if (allowMovement) {
             movementSpeed = Input.GetAxis("Horizontal");
             rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
         }
-
+        //If the player is able to, allow them to punch
+        timeSinceFire += Time.deltaTime;
+        if (Input.GetButton("Fire1") && timeSinceFire >= punchDelay)
+        {
+            print("Fire!");
+            Punch();
+        }
         //Track the mouse and place the dwarfs arm towards it
         mouseLocation = Input.mousePosition;
         mouseLocation = Camera.main.ScreenToWorldPoint(mouseLocation);
@@ -143,5 +177,56 @@ public class DwarfController : MonoBehaviour {
         transform.localScale = mainScale; */
         //flips parity of mouse track vector so that shoulder does not track mouse when player turns
         TrackMouse.directionModifier *= -1;
+    }
+
+    /// <summary>
+    /// Fire a raycast in the direction of the dwarfs gauntlet, and create a circle (the explosion), and from there
+    /// apply our explosion to each rigidbody that the circle has made contact with.
+    /// </summary>
+    /// EW 2018-11-07
+    void Punch()
+    {
+        timeSinceFire = 0f;
+        //reset our punch time
+        dwarfPunch.origin = dwarfPunchOrigin.position;
+        dwarfPunch.direction = armDirection;
+        //Get our location
+        hitCheck = Physics2D.Raycast(dwarfPunch.origin, dwarfPunch.direction, punchRange);
+        if (hitCheck.collider != null)
+        {
+            print("We've hit something");
+            Vector2 explosionPos = hitCheck.point;
+            Collider2D[] hitObjects = Physics2D.OverlapCircleAll(explosionPos, explosionRadius);
+            foreach (Collider2D hit in hitObjects)
+            {
+                Rigidbody2D expVictim = hit.GetComponent<Rigidbody2D>();
+                if (expVictim != null)
+                {
+                    print("WE'VE HIT");
+                    DwarfExplode(expVictim, explosionForce, explosionPos, explosionRadius);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// This function calculates the direction of force to be applied based on the explosions parameters. 
+    /// It will send whichever rigidbody is supplied into the calculated direction at the specified force.
+    /// </summary>
+    /// <param name="expVictim">The Rigidbody 2D we wish to apply force to.</param>
+    /// <param name="explosionForce">Desired strength of the explosion (a float).</param>
+    /// <param name="explosionPos">The origin of the explosion (A vector2 location.)</param>
+    /// <param name="explosionRadius">The width of the explosion. (A float.)</param>
+    /// EW 2018-11-07
+    void DwarfExplode(Rigidbody2D expVictim, float explosionForce, Vector2 explosionPos, float explosionRadius)
+    {
+        Vector2 ExpDir = (Vector2)expVictim.transform.position - explosionPos;
+        ExpDir = ExpDir.normalized;
+        float explosionDistance = Vector2.Distance(explosionPos, ExpDir);
+        Debug.Log(explosionDistance);
+        float explosionStrength = 1f;
+
+        expVictim.velocity = (ExpDir * (explosionStrength * explosionForce));
+        //Tell the engine to simply shove them in our desired direction, no fuss.
     }
 }
