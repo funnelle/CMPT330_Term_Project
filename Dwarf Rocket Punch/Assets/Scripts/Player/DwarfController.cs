@@ -22,14 +22,23 @@ using UnityEngine;
 /// Author: Evan Funnell (EVF)
 /// 
 public class DwarfController : MonoBehaviour {
+    //Mouse Tracking Variables
+    private Vector3 mouseLocation;
+    public Vector2 armDirection;
+    public static int directionModifier = 1;
+    private Transform dwarfArm;
+    //Dwarf Movement Variables
     public bool allowMovement = true;
     public bool onGround = true;
     public float groundCheckRadius = 0.1f;
     public float maxSpeed = 10f;
     public LayerMask ground;
 
+    //Dwarf movement - Private variables
     private Rigidbody2D rb2d;
     private Transform groundCheck;
+
+    //Dwarf animation variables
     private Animator mainAnimator;
     private Animator armAnimator;
     private GameObject[] spriteObjects;
@@ -43,12 +52,13 @@ public class DwarfController : MonoBehaviour {
     /// 2018-10-12  EVF     Initialized variables
     /// 
     void Start()
-    {
+    {   
+        //Get the components we need for moving and animating the player
         rb2d = this.GetComponent<Rigidbody2D>();
         groundCheck = GameObject.Find("/Dwarf/GroundCheck").GetComponent<Transform>();
         mainAnimator = GameObject.Find("/Dwarf/MainAnimationRig").GetComponent<Animator>();
         armAnimator = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms/ArmAnimationRig").GetComponent<Animator>();
-
+        dwarfArm = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms").GetComponent<Transform>();
         //Collect our sprites for our flip function. Then we can go through them and flip them as needed.
         spriteObjects = GameObject.FindGameObjectsWithTag("PlayerSprite");
     }
@@ -66,6 +76,12 @@ public class DwarfController : MonoBehaviour {
             movementSpeed = Input.GetAxis("Horizontal");
             rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
         }
+
+        //Track the mouse and place the dwarfs arm towards it
+        mouseLocation = Input.mousePosition;
+        mouseLocation = Camera.main.ScreenToWorldPoint(mouseLocation);
+        armDirection = new Vector2(mouseLocation.x - transform.position.x, mouseLocation.y - transform.position.y) * directionModifier;
+        dwarfArm.right = armDirection;
         //play arm animation on click
         armAnimator.SetBool("onClick", Input.GetMouseButtonUp(0));
     }
