@@ -36,6 +36,7 @@ public class DwarfController : MonoBehaviour {
     private RaycastHit2D hitCheck;
     private Ray2D dwarfPunch;
     private Transform dwarfPunchOrigin;
+    private Vector2 explosionPos;
 
     //Mouse Tracking Variables
     private Vector3 mouseLocation;
@@ -168,6 +169,8 @@ public class DwarfController : MonoBehaviour {
         // Draw a yellow sphere at the transform's position
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(groundCheck.position, groundCheckRadius);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(explosionPos, explosionRadius);
     }
 
     /// <summary>
@@ -214,10 +217,8 @@ public class DwarfController : MonoBehaviour {
         if (hitCheck.collider != null)
         {
             print("We've hit something");
-            Vector2 explosionPos = hitCheck.point;
+            explosionPos = hitCheck.point;
             Collider2D[] hitObjects = Physics2D.OverlapCircleAll(explosionPos, explosionRadius);
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawSphere(explosionPos, explosionRadius);
             foreach (Collider2D hit in hitObjects)
             {
                 Rigidbody2D expVictim = hit.GetComponent<Rigidbody2D>();
