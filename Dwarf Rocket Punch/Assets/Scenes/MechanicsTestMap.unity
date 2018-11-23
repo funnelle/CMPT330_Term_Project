@@ -114,6 +114,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+<<<<<<< HEAD
 --- !u!1001 &479716829
 Prefab:
   m_ObjectHideFlags: 0
@@ -156,6 +157,8 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8410214af05824adf8c29f7a5e854d8e, type: 2}
   m_IsPrefabAsset: 0
+=======
+>>>>>>> master
 --- !u!1 &852234239
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,6 +530,51 @@ SurfaceEffector2D:
   m_UseContactForce: 0
   m_UseFriction: 0
   m_UseBounce: 0
+<<<<<<< HEAD
+=======
+--- !u!1001 &1941840164
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4299941311177162, guid: d2461950235fe564ebca84fc242bba0b, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0.88
+      objectReference: {fileID: 0}
+    - target: {fileID: 4299941311177162, guid: d2461950235fe564ebca84fc242bba0b, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 2.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 4299941311177162, guid: d2461950235fe564ebca84fc242bba0b, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4299941311177162, guid: d2461950235fe564ebca84fc242bba0b, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4299941311177162, guid: d2461950235fe564ebca84fc242bba0b, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4299941311177162, guid: d2461950235fe564ebca84fc242bba0b, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4299941311177162, guid: d2461950235fe564ebca84fc242bba0b, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4299941311177162, guid: d2461950235fe564ebca84fc242bba0b, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d2461950235fe564ebca84fc242bba0b, type: 2}
+  m_IsPrefabAsset: 0
+>>>>>>> master
 --- !u!1 &2088271018
 GameObject:
   m_ObjectHideFlags: 0
