@@ -24,7 +24,7 @@ using UnityEngine;
 public class DwarfController : MonoBehaviour {
     //Punch speed + range
     public float punchRange = 20f;
-    public float punchDelay = 1.5f;
+    public float punchDelay = 0f;
 
     //Explosion size + force
     public float explosionRadius = 50f;
@@ -49,6 +49,7 @@ public class DwarfController : MonoBehaviour {
     public bool isRocketJumping;
     public float groundCheckRadius = 0.1f;
     public float maxSpeed = 10f;
+    public float airSpeed = 1f;
     public LayerMask ground;
 
     //Dwarf movement - Private variables
@@ -101,9 +102,16 @@ public class DwarfController : MonoBehaviour {
     /// 
     void Update() {
         //Let the player move, if possible.
-        if (allowMovement) {
-            movementSpeed = Input.GetAxis("Horizontal");
+        movementSpeed = Input.GetAxis("Horizontal");
+        onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
+
+        if (onGround)
+        {
             rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
+        }
+        if (!onGround)
+        {
+            rb2d.AddForce(new Vector2(movementSpeed * airSpeed, 0), ForceMode2D.Impulse);
         }
         //If the player is able to, allow them to punch
         timeSinceFire += Time.deltaTime;
@@ -129,8 +137,17 @@ public class DwarfController : MonoBehaviour {
     /// 
     void FixedUpdate() {
         //create a sphere that checks if we are on ground
-        onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
-        
+        /*onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
+
+        if (onGround)
+        {
+            rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
+        }
+        if (!onGround)
+        {
+            rb2d.AddForce(new Vector2(movementSpeed * airSpeed, 0), ForceMode2D.Impulse);
+        }
+        */
         if (Mathf.Abs(rb2d.velocity.x) > 0.01f) {
             mainAnimator.SetBool("isRunning", true);
         }
@@ -161,7 +178,7 @@ public class DwarfController : MonoBehaviour {
     /// 
     void Flip() {
         facingRight = !facingRight;
-        foreach (GameObject spriteObject in spriteObjects)
+        /*foreach (GameObject spriteObject in spriteObjects)
         {
             if(spriteObject.GetComponent<SpriteRenderer>().flipX == true)
             {
@@ -171,13 +188,13 @@ public class DwarfController : MonoBehaviour {
             {
                 spriteObject.GetComponent<SpriteRenderer>().flipX = true;
             }
-        }  
+        }  */
         //flips parity of x-axis render, flipping the character around
-       /* Vector3 mainScale = transform.localScale;
+       Vector3 mainScale = transform.localScale;
         mainScale.x *= -1;
-        transform.localScale = mainScale; */
+        transform.localScale = mainScale;
         //flips parity of mouse track vector so that shoulder does not track mouse when player turns
-        TrackMouse.directionModifier *= -1;
+        directionModifier *= -1;
     }
 
     /// <summary>
@@ -187,11 +204,11 @@ public class DwarfController : MonoBehaviour {
     /// EW 2018-11-07
     void Punch()
     {
-        allowMovement = false;
+        onGround = false;
         timeSinceFire = 0f;
         //reset our punch time
         dwarfPunch.origin = dwarfPunchOrigin.position;
-        dwarfPunch.direction = armDirection;
+        dwarfPunch.direction = facingRight ? -armDirection : dwarfPunch.direction = armDirection;
         //Get our location
         hitCheck = Physics2D.Raycast(dwarfPunch.origin, dwarfPunch.direction, punchRange);
         if (hitCheck.collider != null)
@@ -199,6 +216,8 @@ public class DwarfController : MonoBehaviour {
             print("We've hit something");
             Vector2 explosionPos = hitCheck.point;
             Collider2D[] hitObjects = Physics2D.OverlapCircleAll(explosionPos, explosionRadius);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(explosionPos, explosionRadius);
             foreach (Collider2D hit in hitObjects)
             {
                 Rigidbody2D expVictim = hit.GetComponent<Rigidbody2D>();
