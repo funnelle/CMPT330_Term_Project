@@ -123,7 +123,7 @@ GameObject:
   m_Component:
   - component: {fileID: 88786709}
   m_Layer: 0
-  m_Name: P3
+  m_Name: P2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -136,11 +136,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 88786708}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.36, y: 1.66, z: 0}
+  m_LocalPosition: {x: 0.41, y: -3.39, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1969211553}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &141375021
 GameObject:
@@ -360,8 +360,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   patrolSpeed: 3
+  patrolCheckTime: 1
   patrolPoints:
   - {fileID: 1577732391}
+  - {fileID: 88786709}
   - {fileID: 1690973862}
   - {fileID: 88786709}
 --- !u!61 &511021039
@@ -1461,7 +1463,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1577732391}
   m_Layer: 0
-  m_Name: P1
+  m_Name: Start
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1537,7 +1539,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1690973862}
   m_Layer: 0
-  m_Name: P2
+  m_Name: Final
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1550,11 +1552,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1690973861}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.36, y: -3.39, z: 0}
+  m_LocalPosition: {x: 5.36, y: -1.62, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1969211553}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1703391767
 GameObject:
@@ -1882,8 +1884,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1577732391}
-  - {fileID: 1690973862}
   - {fileID: 88786709}
+  - {fileID: 1690973862}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

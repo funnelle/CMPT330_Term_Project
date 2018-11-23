@@ -9,6 +9,7 @@ public class Elf : MonoBehaviour {
     [SerializeField] private float groundCheckRadius = 0.1f;
     [SerializeField] private LayerMask ground;
     [SerializeField] private float patrolSpeed = 3f;
+    [SerializeField] private float patrolCheckTime = 1f;
 
     public Transform[] patrolPoints;
 
@@ -19,6 +20,7 @@ public class Elf : MonoBehaviour {
     private Transform current, target;
     private int endT;
     private float t, dT;
+    private bool checkingArea = false;
 
     // Use this for initialization
     void Start() {
@@ -42,16 +44,33 @@ public class Elf : MonoBehaviour {
     void Pathing() {
         t += Time.deltaTime * dT;
 
-        if (t >= endT) {
-            current = target;
-            endT = (int)Mathf.Floor(t) + 1;
-            target = patrolPoints[endT % patrolPoints.Length];
-
-            dT = patrolSpeed / Vector2.Distance(current.position, target.position);
+        if (current.gameObject.name == "Start" || current.gameObject.name == "Final") {
+            if (checkingArea == false) {
+                Debug.Log("Checking Area");
+                checkingArea = true;
+                StartCoroutine(PatrolCheck(patrolCheckTime));
+                checkingArea = false;
+            }
         }
 
-        float left = t - endT + 1;
-        transform.position = Vector2.Lerp(current.position, target.position, left);
+        if (checkingArea == false) {
+            Debug.Log("Moving now");
+            if (t >= endT) {
+                current = target;
+                endT = (int)Mathf.Floor(t) + 1;
+                target = patrolPoints[endT % patrolPoints.Length];
+
+                dT = patrolSpeed / Vector2.Distance(current.position, target.position);
+
+            }
+
+            float left = t - endT + 1;
+            transform.position = Vector2.Lerp(current.position, target.position, left);
+        }
+    }
+
+    private IEnumerator PatrolCheck(float waitTime) {
+        yield return new WaitForSeconds(waitTime);
     }
 
     /*
