@@ -106,7 +106,7 @@ public class DwarfController : MonoBehaviour {
         movementSpeed = Input.GetAxis("Horizontal");
         onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
 
-        if (onGround)
+        if (onGround && allowMovement)
         {
             rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
         }
