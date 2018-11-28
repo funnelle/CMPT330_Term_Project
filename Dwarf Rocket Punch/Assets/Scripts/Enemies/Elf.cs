@@ -21,6 +21,7 @@ public class Elf : MonoBehaviour {
     private int endT;
     private float t, dT;
     private bool checkingArea = false;
+    private bool areaChecked = false;
 
     // Use this for initialization
     void Start() {
@@ -34,43 +35,48 @@ public class Elf : MonoBehaviour {
         current = patrolPoints[0];
         transform.position = current.position;
         dT = patrolSpeed / Vector2.Distance(current.position, target.position);
+        
     }
 
     // Update is called once per frame
     void Update() {
-        Pathing();
+        if (current.gameObject.name == "Start" || current.gameObject.name == "End") {
+            if (!areaChecked && !checkingArea) {
+                checkingArea = true;
+                StartCoroutine(PatrolCheck(patrolCheckTime));
+            }
+            if (areaChecked) {
+                Pathing();
+            }
+        }
+        else {
+            areaChecked = false;
+            Pathing();
+        }
     }
 
     void Pathing() {
         t += Time.deltaTime * dT;
 
-        if (current.gameObject.name == "Start" || current.gameObject.name == "Final") {
-            if (checkingArea == false) {
-                Debug.Log("Checking Area");
-                checkingArea = true;
-                StartCoroutine(PatrolCheck(patrolCheckTime));
-                checkingArea = false;
-            }
+        if (t >= endT) {
+            current = target;
+            areaChecked = false;
+            endT = (int)Mathf.Floor(t) + 1;
+            target = patrolPoints[endT % patrolPoints.Length];
+
+            dT = patrolSpeed / Vector2.Distance(current.position, target.position);
         }
 
-        if (checkingArea == false) {
-            Debug.Log("Moving now");
-            if (t >= endT) {
-                current = target;
-                endT = (int)Mathf.Floor(t) + 1;
-                target = patrolPoints[endT % patrolPoints.Length];
+        float left = t - endT + 1;
+        transform.GetComponent<Rigidbody2D>().velocity = Vector3.Lerp(current.position, target.position, left);
+        //transform.position = Vector2.Lerp(current.position, target.position, left);
 
-                dT = patrolSpeed / Vector2.Distance(current.position, target.position);
-
-            }
-
-            float left = t - endT + 1;
-            transform.position = Vector2.Lerp(current.position, target.position, left);
-        }
     }
 
     private IEnumerator PatrolCheck(float waitTime) {
         yield return new WaitForSeconds(waitTime);
+        checkingArea = false;
+        areaChecked = true;
     }
 
     /*
