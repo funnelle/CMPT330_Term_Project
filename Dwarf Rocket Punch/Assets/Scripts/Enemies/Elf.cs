@@ -20,10 +20,11 @@ public class Elf : MonoBehaviour {
     private Transform groundCheck;
     private Transform current, target;
     private int targetCount;
-    private float t, dT;
     private bool checkingArea = false;
     private bool areaChecked = false;
     private Vector3 moveDirection;
+
+
 
     // Use this for initialization
     void Start() {
@@ -40,8 +41,8 @@ public class Elf : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
-        Debug.Log(current.gameObject.name);
+    protected virtual void Update() {
+        //Debug.Log(current.gameObject.name);
         moveDirection = target.position - transform.position;
         moveDirection.y = 0;
 
@@ -51,39 +52,37 @@ public class Elf : MonoBehaviour {
                 StartCoroutine(PatrolCheck(patrolCheckTime));
             }
             if (areaChecked) {
-                Pathing();
+                Patrolling();
             }
         }
         else {
             areaChecked = false;
-            Pathing();
+            Patrolling();
         }
     }
 
-    void Pathing() {
-        Debug.Log("Current Move Direction: " + moveDirection.x);
-        Debug.Log("Current Target is " + target.name);
-
+    //Elf will patrol an area following pathing points
+    private void Patrolling() {
+        //Debug.Log("Current Move Direction: " + moveDirection.x);
+        //Debug.Log("Current Target is " + target.name);
         if ((moveDirection.normalized.x > 0 && moveDirection.x < minDistance) || (moveDirection.normalized.x < 0 && moveDirection.x > (minDistance * -1))){
-            Debug.Log("I need to change target");
-
+            //Debug.Log("I need to change target");
             if (targetCount == patrolPoints.Length - 1) {
-                Debug.Log("Going back to start");
+                //Debug.Log("Going back to start");
                 targetCount = 0;
             }
             else {
                 targetCount++;
-                Debug.Log("next target num: " + targetCount);
+                //Debug.Log("next target num: " + targetCount);
             }
-
             current = target;
             areaChecked = false;
             target = patrolPoints[targetCount];
-            Debug.Log("My new Target is: " + target.name);
+            //Debug.Log("My new Target is: " + target.name);
         }
-        Debug.Log(moveDirection.normalized);
+        //Debug.Log(moveDirection.normalized);
         transform.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * patrolSpeed;
-        Debug.Log(transform.GetComponent<Rigidbody2D>().velocity);
+        //Debug.Log(transform.GetComponent<Rigidbody2D>().velocity);
     }
 
     private IEnumerator PatrolCheck(float waitTime) {
@@ -92,9 +91,7 @@ public class Elf : MonoBehaviour {
         areaChecked = true;
     }
 
-    /*
     void isGrounded() {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
     }
-    */
 }
