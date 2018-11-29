@@ -10,6 +10,7 @@ public class Elf : MonoBehaviour {
     [SerializeField] private LayerMask ground;
     [SerializeField] private float patrolSpeed = 3f;
     [SerializeField] private float patrolCheckTime = 1f;
+    [SerializeField] private float minDistance = 0.3f;
 
     public Transform[] patrolPoints;
 
@@ -18,10 +19,11 @@ public class Elf : MonoBehaviour {
     private AudioSource audioSource;
     private Transform groundCheck;
     private Transform current, target;
-    private int endT;
+    private int targetCount;
     private float t, dT;
     private bool checkingArea = false;
     private bool areaChecked = false;
+    private Vector3 moveDirection;
 
     // Use this for initialization
     void Start() {
@@ -30,16 +32,19 @@ public class Elf : MonoBehaviour {
         audioSource = GetComponent<AudioSource>();
         groundCheck = this.transform.Find("GroundCheck");
 
-        endT = 1;
+        targetCount = 1;
         target = patrolPoints[1];
         current = patrolPoints[0];
         transform.position = current.position;
-        dT = patrolSpeed / Vector2.Distance(current.position, target.position);
         
     }
 
     // Update is called once per frame
     void Update() {
+        Debug.Log(current.gameObject.name);
+        moveDirection = target.position - transform.position;
+        moveDirection.y = 0;
+
         if (current.gameObject.name == "Start" || current.gameObject.name == "End") {
             if (!areaChecked && !checkingArea) {
                 checkingArea = true;
@@ -56,21 +61,29 @@ public class Elf : MonoBehaviour {
     }
 
     void Pathing() {
-        t += Time.deltaTime * dT;
+        Debug.Log("Current Move Direction: " + moveDirection.x);
+        Debug.Log("Current Target is " + target.name);
 
-        if (t >= endT) {
+        if ((moveDirection.normalized.x > 0 && moveDirection.x < minDistance) || (moveDirection.normalized.x < 0 && moveDirection.x > (minDistance * -1))){
+            Debug.Log("I need to change target");
+
+            if (targetCount == patrolPoints.Length - 1) {
+                Debug.Log("Going back to start");
+                targetCount = 0;
+            }
+            else {
+                targetCount++;
+                Debug.Log("next target num: " + targetCount);
+            }
+
             current = target;
             areaChecked = false;
-            endT = (int)Mathf.Floor(t) + 1;
-            target = patrolPoints[endT % patrolPoints.Length];
-
-            dT = patrolSpeed / Vector2.Distance(current.position, target.position);
+            target = patrolPoints[targetCount];
+            Debug.Log("My new Target is: " + target.name);
         }
-
-        float left = t - endT + 1;
-        transform.GetComponent<Rigidbody2D>().velocity = Vector3.Lerp(current.position, target.position, left);
-        //transform.position = Vector2.Lerp(current.position, target.position, left);
-
+        Debug.Log(moveDirection.normalized);
+        transform.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * patrolSpeed;
+        Debug.Log(transform.GetComponent<Rigidbody2D>().velocity);
     }
 
     private IEnumerator PatrolCheck(float waitTime) {
