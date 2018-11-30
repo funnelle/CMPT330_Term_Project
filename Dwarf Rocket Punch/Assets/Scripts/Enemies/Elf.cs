@@ -14,7 +14,7 @@ public class Elf : MonoBehaviour {
 
     public Transform[] patrolPoints;
 
-    protected enum State {PATROLLING, ATTACKING};
+    protected enum State {PATROLLING, ATTACKING, RETREATING};
     protected State state;
 
     private Rigidbody2D rb2d;
@@ -27,10 +27,8 @@ public class Elf : MonoBehaviour {
     private bool areaChecked = false;
     private Vector3 moveDirection;
 
-
-
     // Use this for initialization
-    void Start() {
+    protected virtual void Start() {
         rb2d = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         audioSource = GetComponent<AudioSource>();
@@ -68,26 +66,18 @@ public class Elf : MonoBehaviour {
 
     //Elf will patrol an area following pathing points
     private void Patrolling() {
-        //Debug.Log("Current Move Direction: " + moveDirection.x);
-        //Debug.Log("Current Target is " + target.name);
         if ((moveDirection.normalized.x > 0 && moveDirection.x < minDistance) || (moveDirection.normalized.x < 0 && moveDirection.x > (minDistance * -1))){
-            //Debug.Log("I need to change target");
             if (targetCount == patrolPoints.Length - 1) {
-                //Debug.Log("Going back to start");
                 targetCount = 0;
             }
             else {
                 targetCount++;
-                //Debug.Log("next target num: " + targetCount);
             }
             current = target;
             areaChecked = false;
             target = patrolPoints[targetCount];
-            //Debug.Log("My new Target is: " + target.name);
         }
-        //Debug.Log(moveDirection.normalized);
         transform.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * patrolSpeed;
-        //Debug.Log(transform.GetComponent<Rigidbody2D>().velocity);
     }
 
     private IEnumerator PatrolCheck(float waitTime) {
