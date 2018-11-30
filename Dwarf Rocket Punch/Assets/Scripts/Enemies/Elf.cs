@@ -14,6 +14,9 @@ public class Elf : MonoBehaviour {
 
     public Transform[] patrolPoints;
 
+    protected enum State {PATROLLING, ATTACKING};
+    protected State state;
+
     private Rigidbody2D rb2d;
     private BoxCollider2D boxCollider;
     private AudioSource audioSource;
@@ -32,6 +35,7 @@ public class Elf : MonoBehaviour {
         boxCollider = GetComponent<BoxCollider2D>();
         audioSource = GetComponent<AudioSource>();
         groundCheck = this.transform.Find("GroundCheck");
+        state = State.PATROLLING;
 
         targetCount = 1;
         target = patrolPoints[1];
@@ -42,22 +46,23 @@ public class Elf : MonoBehaviour {
 
     // Update is called once per frame
     protected virtual void Update() {
-        //Debug.Log(current.gameObject.name);
-        moveDirection = target.position - transform.position;
-        moveDirection.y = 0;
+        if (state == State.PATROLLING) {
+            moveDirection = target.position - transform.position;
+            moveDirection.y = 0;
 
-        if (current.gameObject.name == "Start" || current.gameObject.name == "End") {
-            if (!areaChecked && !checkingArea) {
-                checkingArea = true;
-                StartCoroutine(PatrolCheck(patrolCheckTime));
+            if (current.gameObject.name == "Start" || current.gameObject.name == "End") {
+                if (!areaChecked && !checkingArea) {
+                    checkingArea = true;
+                    StartCoroutine(PatrolCheck(patrolCheckTime));
+                }
+                if (areaChecked) {
+                    Patrolling();
+                }
             }
-            if (areaChecked) {
+            else {
+                areaChecked = false;
                 Patrolling();
             }
-        }
-        else {
-            areaChecked = false;
-            Patrolling();
         }
     }
 
