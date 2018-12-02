@@ -216,14 +216,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 179799068}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1546910b96334b6d83c37c2d66ae041, type: 3}
+  m_Script: {fileID: 11500000, guid: 716534120c2844281ab638ab28408efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   grounded: 0
   groundCheckRadius: 0.1
   ground:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 0
   patrolSpeed: 3
   patrolCheckTime: 1
   minDistance: 0.3
@@ -231,6 +231,8 @@ MonoBehaviour:
   - {fileID: 1164979057}
   - {fileID: 1978566515}
   - {fileID: 245598325}
+  detectionAngle: 45
+  playerPosition: {fileID: 357818218}
 --- !u!82 &179799073
 AudioSource:
   m_ObjectHideFlags: 0
@@ -421,6 +423,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!4 &357818218 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4091162731815402, guid: d2461950235fe564ebca84fc242bba0b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1941840164}
 --- !u!1 &852234239
 GameObject:
   m_ObjectHideFlags: 0
@@ -911,7 +918,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4299941311177162, guid: d2461950235fe564ebca84fc242bba0b, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 2.61
+      value: -3.29
       objectReference: {fileID: 0}
     - target: {fileID: 4299941311177162, guid: d2461950235fe564ebca84fc242bba0b, type: 2}
       propertyPath: m_LocalPosition.z
