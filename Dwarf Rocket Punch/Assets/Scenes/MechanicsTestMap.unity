@@ -231,7 +231,7 @@ MonoBehaviour:
   - {fileID: 1164979057}
   - {fileID: 1978566515}
   - {fileID: 245598325}
-  detectionAngle: 45
+  detectionAngle: 90
   playerPosition: {fileID: 357818218}
 --- !u!82 &179799073
 AudioSource:
@@ -452,7 +452,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 852234239}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.155, y: 5.98, z: 0}
+  m_LocalPosition: {x: 0.155, y: 7.93, z: 0}
   m_LocalScale: {x: 0.35430002, y: 0.96799994, z: 1}
   m_Children: []
   m_Father: {fileID: 1636409830}
@@ -629,7 +629,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1355971036}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0492, y: 8.423, z: 0}
+  m_LocalPosition: {x: -0.0492, y: 10.43, z: 0}
   m_LocalScale: {x: 0.055127602, y: 5.9298954, z: 1}
   m_Children: []
   m_Father: {fileID: 1636409830}
@@ -918,7 +918,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4299941311177162, guid: d2461950235fe564ebca84fc242bba0b, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -3.29
+      value: 3.31
       objectReference: {fileID: 0}
     - target: {fileID: 4299941311177162, guid: d2461950235fe564ebca84fc242bba0b, type: 2}
       propertyPath: m_LocalPosition.z

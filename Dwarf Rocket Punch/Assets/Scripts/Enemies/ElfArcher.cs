@@ -3,35 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ElfArcher : Elf {
-    [SerializeField] private float detectionAngle = 45f;
+    [SerializeField] private float detectionAngle = 90f;
 
-    private float detectionAngleInRads;
-    private float detectionCos;
     private float elfPlayerDot;
-    private Vector2 rayDirection;
+    private Vector2 direction;
 
     public Transform playerPosition;
 
-    protected override void Start() {
-        base.Start();
-        detectionAngleInRads = detectionAngle * Mathf.Deg2Rad;
-        detectionCos = Mathf.Cos(detectionAngleInRads);
-    }
-
     protected override void Update() {
         base.Update();
-        rayDirection = playerPosition.position - transform.position;
-       
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, rayDirection);
-        Debug.DrawRay(transform.position, rayDirection, Color.red);
-        elfPlayerDot = Vector2.Dot(transform.position, playerPosition.position);
+        direction = playerPosition.position - transform.position;
+        elfPlayerDot = Vector2.Angle(direction, transform.right);
 
-        if (detectionCos > elfPlayerDot) {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction);
+        Debug.DrawRay(transform.position, direction, Color.red);
+
+        if (elfPlayerDot < detectionAngle * 0.5f) {
             Debug.Log("I see you");
             Debug.Log(hit.collider.name);
             Debug.Log(playerPosition.name);
             if (hit.collider.name != playerPosition.parent.name) {
                 Debug.Log("Why you behind a wall, boo you suck");
+                state = State.PATROLLING;
             }
             else {
                 state = State.ATTACKING;
@@ -42,6 +35,7 @@ public class ElfArcher : Elf {
             AttackMode();
         }
     }
+
     private void AttackMode() {
         Debug.Log("I'm attacking, ARRGGGG");
     }
