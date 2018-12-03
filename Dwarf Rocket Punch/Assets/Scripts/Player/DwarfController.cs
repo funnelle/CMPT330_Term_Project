@@ -21,8 +21,12 @@ using UnityEngine;
 /// 
 /// Author: Evan Funnell (EVF)
 /// 
+<<<<<<< HEAD
 public class DwarfController : MonoBehaviour
 {
+=======
+public class DwarfController : MonoBehaviour {
+>>>>>>> master
     //Punch speed + range
     public float punchRange = 20f;
     public float punchDelay = 0f;
@@ -49,12 +53,18 @@ public class DwarfController : MonoBehaviour
     public bool allowMovement = true;
     public bool onGround = true;
     public bool isRocketJumping;
+<<<<<<< HEAD
     public bool allowWallJump = false;
     public float groundCheckRadius = 0.1f;
     public float maxSpeed = 10f;
     public float airSpeed = 1f;
     public float jumpForce = 20f;
     public float slideTime = 1f;
+=======
+    public float groundCheckRadius = 0.1f;
+    public float maxSpeed = 10f;
+    public float airSpeed = 1f;
+>>>>>>> master
     public LayerMask ground;
 
     //Dwarf movement - Private variables
@@ -75,6 +85,7 @@ public class DwarfController : MonoBehaviour
     /// 2018-10-12  EVF     Initialized variables
     /// 
     void Start()
+<<<<<<< HEAD
     {
         //Let his punches leave his own collider
         Physics2D.queriesStartInColliders = false;
@@ -87,6 +98,20 @@ public class DwarfController : MonoBehaviour
         mainAnimator = GameObject.Find("/Dwarf/MainAnimationRig").GetComponent<Animator>();
         armAnimator = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms/ArmAnimationRig").GetComponent<Animator>();
 
+=======
+    {   
+        //Let his punches leave his own collider
+        Physics2D.queriesStartInColliders = false;
+        
+        //Get the components we need for moving the player
+        rb2d = this.GetComponent<Rigidbody2D>();
+        groundCheck = GameObject.Find("/Dwarf/GroundCheck").GetComponent<Transform>();
+        
+        //Get the componenets we need for animation the player
+        mainAnimator = GameObject.Find("/Dwarf/MainAnimationRig").GetComponent<Animator>();
+        armAnimator = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms/ArmAnimationRig").GetComponent<Animator>();
+        
+>>>>>>> master
         //Get the component we need to change with mouse direction
         dwarfArm = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms").GetComponent<Transform>();
 
@@ -96,6 +121,7 @@ public class DwarfController : MonoBehaviour
         //Collect our sprites for our flip function. Then we can go through them and flip them as needed.
         spriteObjects = GameObject.FindGameObjectsWithTag("PlayerSprite");
     }
+        
 
 
     /// <summary>
@@ -105,8 +131,12 @@ public class DwarfController : MonoBehaviour
     /// 2018-10-12  EVF     Added movement code
     /// 2018-11-7   EPM     Added mouse click code
     /// 
+<<<<<<< HEAD
     void Update()
     {
+=======
+    void Update() {
+>>>>>>> master
         //Let the player move, if possible.
         movementSpeed = Input.GetAxis("Horizontal");
         onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
@@ -118,12 +148,16 @@ public class DwarfController : MonoBehaviour
         if (!onGround)
         {
             rb2d.AddForce(new Vector2(movementSpeed * airSpeed, 0), ForceMode2D.Impulse);
+<<<<<<< HEAD
             //If x velocity becomes greater than maxSpeed, set it to maxSpeed
             if (Mathf.Abs(rb2d.velocity.x) > maxSpeed)
                 rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
         }
         Debug.Log(rb2d.velocity.x);
 
+=======
+        }
+>>>>>>> master
         //If the player is able to, allow them to punch
         timeSinceFire += Time.deltaTime;
         if (Input.GetButton("Fire1") && timeSinceFire >= punchDelay)
@@ -150,6 +184,7 @@ public class DwarfController : MonoBehaviour
     {
         //create a sphere that checks if we are on ground
         /*onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
+<<<<<<< HEAD
 
         if (onGround)
         {
@@ -188,6 +223,19 @@ public class DwarfController : MonoBehaviour
 
         if (Mathf.Abs(rb2d.velocity.x) > 0.01f)
         {
+=======
+
+        if (onGround)
+        {
+            rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
+        }
+        if (!onGround)
+        {
+            rb2d.AddForce(new Vector2(movementSpeed * airSpeed, 0), ForceMode2D.Impulse);
+        }
+        */
+        if (Mathf.Abs(rb2d.velocity.x) > 0.01f) {
+>>>>>>> master
             mainAnimator.SetBool("isRunning", true);
         }
         else
@@ -236,7 +284,7 @@ public class DwarfController : MonoBehaviour
             }
         }  */
         //flips parity of x-axis render, flipping the character around
-        Vector3 mainScale = transform.localScale;
+       Vector3 mainScale = transform.localScale;
         mainScale.x *= -1;
         transform.localScale = mainScale;
         //flips parity of mouse track vector so that shoulder does not track mouse when player turns
@@ -293,6 +341,7 @@ public class DwarfController : MonoBehaviour
 
         expVictim.velocity = (ExpDir * (explosionStrength * explosionForce));
         //Tell the engine to simply shove them in our desired direction, no fuss.
+<<<<<<< HEAD
     }
 
     /// <summary>
@@ -347,5 +396,7 @@ public class DwarfController : MonoBehaviour
     {
         yield return new WaitForSeconds(slideTime);
         allowWallJump = false;
+=======
+>>>>>>> master
     }
 }
