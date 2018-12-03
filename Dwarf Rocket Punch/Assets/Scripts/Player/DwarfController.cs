@@ -80,11 +80,11 @@ public class DwarfController : MonoBehaviour {
         groundCheck = GameObject.Find("/Dwarf/GroundCheck").GetComponent<Transform>();
         
         //Get the componenets we need for animation the player
-        mainAnimator = GameObject.Find("/Dwarf/MainAnimationRig").GetComponent<Animator>();
-        armAnimator = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms/ArmAnimationRig").GetComponent<Animator>();
+        mainAnimator = GameObject.Find("/Dwarf/DwarfAnimationRig").GetComponent<Animator>();
+        armAnimator = GameObject.Find("/Dwarf/DwarfAnimationRig/Torso/Arms/DwarfArmAnimationRig").GetComponent<Animator>();
         
         //Get the component we need to change with mouse direction
-        dwarfArm = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms").GetComponent<Transform>();
+        dwarfArm = GameObject.Find("/Dwarf/DwarfAnimationRig/Torso/Arms").GetComponent<Transform>();
 
         //Get the component that is the origin of the dwarf's punch raycast.
         dwarfPunchOrigin = GameObject.Find("/Dwarf/RocketLocation/").GetComponent<Transform>();
