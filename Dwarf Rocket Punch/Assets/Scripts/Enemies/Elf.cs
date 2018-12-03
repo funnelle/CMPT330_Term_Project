@@ -16,6 +16,7 @@ public class Elf : MonoBehaviour {
 
     public Transform[] patrolPoints;
     public Transform playerPosition;
+    public GameObject positionMarker;
 
     protected enum State {PATROLLING, ATTACKING, SEARCHING, RETREATING};
     protected State state;
@@ -32,11 +33,12 @@ public class Elf : MonoBehaviour {
     private bool checkingArea = false;
     private bool areaChecked = false;
     private bool playerSpotted = false;
+    private bool lastKnownPlayerPositionSampled = false;
+    private bool huntingPlayer = false; 
     private Vector3 moveDirection;
     private Vector2 playerDirection;
     private Vector3 lastKnownPlayerPosition;
     private Vector2 lastKnownPlayerDirection;
-    private bool lastKnownPlayerPositionSampled = false;
 
     // Use this for initialization
     protected virtual void Start() {
@@ -76,6 +78,27 @@ public class Elf : MonoBehaviour {
             }
         }
 
+        //SEARCHING state
+        if (state == State.SEARCHING) {
+            Debug.Log("I'm here bitch, fuck you elf");
+            lastKnownPlayerDirection = positionMarker.transform.position - transform.position;
+            lastKnownPlayerDirection.y = 0;
+
+            if ((lastKnownPlayerDirection.normalized.x > 0 && lastKnownPlayerDirection.x < minDistance) || (lastKnownPlayerDirection.normalized.x < 0 && lastKnownPlayerDirection.x > (minDistance * -1))) {
+                Debug.Log("I'm already tracer");
+                transform.position = new Vector2(positionMarker.transform.position.x, transform.position.y);
+                StartCoroutine(InvestigationCheck(investigateCheckTime));
+            }
+
+            if (IsGrounded()) {
+                rb2d.velocity = new Vector2(lastKnownPlayerDirection.normalized.x * patrolSpeed, 0);
+            }
+            else {
+                rb2d.velocity = new Vector2(lastKnownPlayerDirection.normalized.x * patrolSpeed, rb2d.velocity.y);
+            }
+            Debug.Log("my velocity " + rb2d.velocity);
+        }
+
         //Player detection
         playerDirection = playerPosition.position - transform.position;
         if (facingRight) {
@@ -102,23 +125,13 @@ public class Elf : MonoBehaviour {
             }
         }
 
-        //Searching State
-        if (playerSpotted && (elfPlayerDot > detectionAngle * 0.5f)) {
-            //Player missing, investigate area
+        //Identify last known position and start searching
+        if (playerSpotted && (hit.collider.name != playerPosition.parent.name)) {
             state = State.SEARCHING;
             if (lastKnownPlayerPositionSampled == false) {
-                lastKnownPlayerPosition = playerPosition.position;
+                positionMarker.transform.position = playerPosition.position;
                 lastKnownPlayerPositionSampled = true;
             }
-            lastKnownPlayerDirection = lastKnownPlayerPosition - transform.position;
-            lastKnownPlayerDirection.y = 0;
-            //wait once you arrive at the location
-            if ((lastKnownPlayerDirection.normalized.x > 0 && lastKnownPlayerDirection.x < minDistance) || (lastKnownPlayerDirection.normalized.x < 0 && lastKnownPlayerDirection.x > (minDistance * -1))) {
-                StartCoroutine(InvestigationCheck(investigateCheckTime));
-            }
-
-            rb2d.velocity = lastKnownPlayerDirection.normalized * patrolSpeed;
-           
         }
     }
 
@@ -135,7 +148,13 @@ public class Elf : MonoBehaviour {
             areaChecked = false;
             target = patrolPoints[targetCount];
         }
-        rb2d.velocity = moveDirection.normalized * patrolSpeed;
+
+        if (IsGrounded()) {
+            rb2d.velocity = new Vector2(moveDirection.normalized.x * patrolSpeed, 0);
+        }
+        else {
+            rb2d.velocity = new Vector2(moveDirection.normalized.x * patrolSpeed, rb2d.velocity.y);
+        }
 
         if (moveDirection.normalized.x > 0 && !facingRight) {
             Flip();
@@ -165,9 +184,8 @@ public class Elf : MonoBehaviour {
         transform.localScale = theScale;
     }
 
-    void isGrounded() {
+    bool IsGrounded() {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
+        return grounded;
     }
-
-
 }
