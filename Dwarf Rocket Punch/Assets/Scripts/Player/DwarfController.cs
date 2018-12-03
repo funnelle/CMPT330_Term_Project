@@ -64,6 +64,9 @@ public class DwarfController : MonoBehaviour {
     private bool facingRight;
     private float movementSpeed;
 
+    //Explosion Particle variables
+    private ParticleSystem explosionPS;
+
     /// <summary>
     /// Initialize variables at game start
     /// </summary>
@@ -91,6 +94,9 @@ public class DwarfController : MonoBehaviour {
 
         //Collect our sprites for our flip function. Then we can go through them and flip them as needed.
         spriteObjects = GameObject.FindGameObjectsWithTag("PlayerSprite");
+
+        //Get the explosion particle system
+        explosionPS = GetComponent<ParticleSystem>();
     }
         
 
@@ -253,5 +259,9 @@ public class DwarfController : MonoBehaviour {
 
         expVictim.velocity = (ExpDir * (explosionStrength * explosionForce));
         //Tell the engine to simply shove them in our desired direction, no fuss.
+
+        //play the particle system
+        explosionPS.transform.position = explosionPos;
+        explosionPS.Play();
     }
 }
