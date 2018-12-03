@@ -5,7 +5,6 @@ using UnityEngine;
 public class ElfArcher : Elf {
     protected override void Update() {
         base.Update();
-
         if (state == State.ATTACKING) {
             AttackMode();
         }

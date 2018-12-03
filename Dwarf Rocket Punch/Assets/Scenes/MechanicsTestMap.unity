@@ -226,12 +226,13 @@ MonoBehaviour:
     m_Bits: 0
   patrolSpeed: 3
   patrolCheckTime: 1
+  investigateCheckTime: 5
   minDistance: 0.3
+  detectionAngle: 90
   patrolPoints:
   - {fileID: 1164979057}
   - {fileID: 1978566515}
   - {fileID: 245598325}
-  detectionAngle: 90
   playerPosition: {fileID: 357818218}
 --- !u!82 &179799073
 AudioSource:

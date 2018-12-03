@@ -10,13 +10,14 @@ public class Elf : MonoBehaviour {
     [SerializeField] private LayerMask ground;
     [SerializeField] private float patrolSpeed = 3f;
     [SerializeField] private float patrolCheckTime = 1f;
+    [SerializeField] private float investigateCheckTime = 2f;
     [SerializeField] private float minDistance = 0.3f;
     [SerializeField] private float detectionAngle = 90f;
 
     public Transform[] patrolPoints;
     public Transform playerPosition;
 
-    protected enum State {PATROLLING, ATTACKING, RETREATING};
+    protected enum State {PATROLLING, ATTACKING, SEARCHING, RETREATING};
     protected State state;
     protected bool facingRight = true;
 
@@ -25,12 +26,17 @@ public class Elf : MonoBehaviour {
     private AudioSource audioSource;
     private Transform groundCheck;
     private Transform current, target;
+
     private int targetCount;
+    private float elfPlayerDot;
     private bool checkingArea = false;
     private bool areaChecked = false;
+    private bool playerSpotted = false;
     private Vector3 moveDirection;
-    private float elfPlayerDot;
     private Vector2 playerDirection;
+    private Vector3 lastKnownPlayerPosition;
+    private Vector2 lastKnownPlayerDirection;
+    private bool lastKnownPlayerPositionSampled = false;
 
     // Use this for initialization
     protected virtual void Start() {
@@ -49,6 +55,7 @@ public class Elf : MonoBehaviour {
 
     // Update is called once per frame
     protected virtual void Update() {
+        Debug.Log("My Current State: " + state);
         //Patrolling State
         if (state == State.PATROLLING) {
             moveDirection = target.position - transform.position;
@@ -90,8 +97,28 @@ public class Elf : MonoBehaviour {
                 state = State.PATROLLING;
             }
             else {
+                playerSpotted = true;
                 state = State.ATTACKING;
             }
+        }
+
+        //Searching State
+        if (playerSpotted && (elfPlayerDot > detectionAngle * 0.5f)) {
+            //Player missing, investigate area
+            state = State.SEARCHING;
+            if (lastKnownPlayerPositionSampled == false) {
+                lastKnownPlayerPosition = playerPosition.position;
+                lastKnownPlayerPositionSampled = true;
+            }
+            lastKnownPlayerDirection = lastKnownPlayerPosition - transform.position;
+            lastKnownPlayerDirection.y = 0;
+            //wait once you arrive at the location
+            if ((lastKnownPlayerDirection.normalized.x > 0 && lastKnownPlayerDirection.x < minDistance) || (lastKnownPlayerDirection.normalized.x < 0 && lastKnownPlayerDirection.x > (minDistance * -1))) {
+                StartCoroutine(InvestigationCheck(investigateCheckTime));
+            }
+
+            rb2d.velocity = lastKnownPlayerDirection.normalized * patrolSpeed;
+           
         }
     }
 
@@ -108,7 +135,7 @@ public class Elf : MonoBehaviour {
             areaChecked = false;
             target = patrolPoints[targetCount];
         }
-        transform.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * patrolSpeed;
+        rb2d.velocity = moveDirection.normalized * patrolSpeed;
 
         if (moveDirection.normalized.x > 0 && !facingRight) {
             Flip();
@@ -122,6 +149,13 @@ public class Elf : MonoBehaviour {
         yield return new WaitForSeconds(waitTime);
         checkingArea = false;
         areaChecked = true;
+    }
+
+    private IEnumerator InvestigationCheck(float investigateTime) {
+        yield return new WaitForSeconds(investigateTime);
+        playerSpotted = false;
+        lastKnownPlayerPositionSampled = false;
+        state = State.PATROLLING;
     }
 
     void Flip() {
