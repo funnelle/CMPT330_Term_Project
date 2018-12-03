@@ -11,11 +11,14 @@ public class Elf : MonoBehaviour {
     [SerializeField] private float patrolSpeed = 3f;
     [SerializeField] private float patrolCheckTime = 1f;
     [SerializeField] private float minDistance = 0.3f;
+    [SerializeField] private float detectionAngle = 90f;
 
     public Transform[] patrolPoints;
+    public Transform playerPosition;
 
-    protected enum State {PATROLLING, ATTACKING};
+    protected enum State {PATROLLING, ATTACKING, RETREATING};
     protected State state;
+    protected bool facingRight = true;
 
     private Rigidbody2D rb2d;
     private BoxCollider2D boxCollider;
@@ -26,11 +29,11 @@ public class Elf : MonoBehaviour {
     private bool checkingArea = false;
     private bool areaChecked = false;
     private Vector3 moveDirection;
-
-
+    private float elfPlayerDot;
+    private Vector2 playerDirection;
 
     // Use this for initialization
-    void Start() {
+    protected virtual void Start() {
         rb2d = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         audioSource = GetComponent<AudioSource>();
@@ -46,6 +49,7 @@ public class Elf : MonoBehaviour {
 
     // Update is called once per frame
     protected virtual void Update() {
+        //Patrolling State
         if (state == State.PATROLLING) {
             moveDirection = target.position - transform.position;
             moveDirection.y = 0;
@@ -64,30 +68,54 @@ public class Elf : MonoBehaviour {
                 Patrolling();
             }
         }
+
+        //Player detection
+        playerDirection = playerPosition.position - transform.position;
+        if (facingRight) {
+            elfPlayerDot = Vector2.Angle(playerDirection, transform.right);
+        }
+        else if (!facingRight) {
+            elfPlayerDot = Vector2.Angle(playerDirection, (transform.right * -1));
+        }
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDirection);
+        Debug.DrawRay(transform.position, playerDirection, Color.red);
+
+        if (elfPlayerDot < detectionAngle * 0.5f) {
+            Debug.Log("I see you");
+            Debug.Log(hit.collider.name);
+            Debug.Log(playerPosition.name);
+            if (hit.collider.name != playerPosition.parent.name) {
+                Debug.Log("Why you behind a wall, boo you suck");
+                state = State.PATROLLING;
+            }
+            else {
+                state = State.ATTACKING;
+            }
+        }
     }
 
     //Elf will patrol an area following pathing points
     private void Patrolling() {
-        //Debug.Log("Current Move Direction: " + moveDirection.x);
-        //Debug.Log("Current Target is " + target.name);
         if ((moveDirection.normalized.x > 0 && moveDirection.x < minDistance) || (moveDirection.normalized.x < 0 && moveDirection.x > (minDistance * -1))){
-            //Debug.Log("I need to change target");
             if (targetCount == patrolPoints.Length - 1) {
-                //Debug.Log("Going back to start");
                 targetCount = 0;
             }
             else {
                 targetCount++;
-                //Debug.Log("next target num: " + targetCount);
             }
             current = target;
             areaChecked = false;
             target = patrolPoints[targetCount];
-            //Debug.Log("My new Target is: " + target.name);
         }
-        //Debug.Log(moveDirection.normalized);
         transform.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * patrolSpeed;
-        //Debug.Log(transform.GetComponent<Rigidbody2D>().velocity);
+
+        if (moveDirection.normalized.x > 0 && !facingRight) {
+            Flip();
+        } else if (moveDirection.normalized.x < 0 && facingRight) {
+            Flip();
+        }
+
     }
 
     private IEnumerator PatrolCheck(float waitTime) {
@@ -96,7 +124,16 @@ public class Elf : MonoBehaviour {
         areaChecked = true;
     }
 
+    void Flip() {
+        facingRight = !facingRight;
+        Vector3 theScale = transform.localScale;
+        theScale.x *= -1;
+        transform.localScale = theScale;
+    }
+
     void isGrounded() {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
     }
+
+
 }
