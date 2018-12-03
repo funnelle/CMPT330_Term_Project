@@ -54,8 +54,8 @@ public class DwarfController : MonoBehaviour {
     public bool allowWallJump = false;
     public float groundCheckRadius = 0.1f;
     public float maxSpeed = 10f;
-    public float airSpeed = 1f;
-    public float jumpForce = 20f;
+    public float airSpeed = 0.28f;
+    public float jumpForce = 15f;
     public float slideTime = 1f;
 
     public LayerMask ground;
@@ -126,7 +126,6 @@ public class DwarfController : MonoBehaviour {
             if (Mathf.Abs(rb2d.velocity.x) > maxSpeed)
                 rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
         }
-        Debug.Log(rb2d.velocity.x);
 
         //If the player is able to, allow them to punch
         timeSinceFire += Time.deltaTime;

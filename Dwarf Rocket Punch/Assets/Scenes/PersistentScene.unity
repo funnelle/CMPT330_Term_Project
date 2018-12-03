@@ -378,7 +378,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   faderCanvasGroup: {fileID: 1313041400}
   fadeDuration: 1
-  startingSceneName: MechanicsTestMap
+  startingSceneName: WalljumpingTestMap
   activeScene: 
 --- !u!4 &1788456719
 Transform:
