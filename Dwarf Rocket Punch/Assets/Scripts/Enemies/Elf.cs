@@ -10,27 +10,38 @@ public class Elf : MonoBehaviour {
     [SerializeField] private LayerMask ground;
     [SerializeField] private float patrolSpeed = 3f;
     [SerializeField] private float patrolCheckTime = 1f;
+    [SerializeField] private float investigateCheckTime = 2f;
     [SerializeField] private float minDistance = 0.3f;
+    [SerializeField] private float detectionAngle = 90f;
 
     public Transform[] patrolPoints;
+    public Transform playerPosition;
+    public GameObject positionMarker;
 
-    protected enum State {PATROLLING, ATTACKING};
+    protected enum State {PATROLLING, ATTACKING, SEARCHING, RETREATING};
     protected State state;
+    protected bool facingRight = true;
 
     private Rigidbody2D rb2d;
     private BoxCollider2D boxCollider;
     private AudioSource audioSource;
     private Transform groundCheck;
     private Transform current, target;
+
     private int targetCount;
+    private float elfPlayerDot;
     private bool checkingArea = false;
     private bool areaChecked = false;
+    private bool playerSpotted = false;
+    private bool lastKnownPlayerPositionSampled = false;
+    private bool huntingPlayer = false; 
     private Vector3 moveDirection;
-
-
+    private Vector2 playerDirection;
+    private Vector3 lastKnownPlayerPosition;
+    private Vector2 lastKnownPlayerDirection;
 
     // Use this for initialization
-    void Start() {
+    protected virtual void Start() {
         rb2d = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         audioSource = GetComponent<AudioSource>();
@@ -46,6 +57,8 @@ public class Elf : MonoBehaviour {
 
     // Update is called once per frame
     protected virtual void Update() {
+        Debug.Log("My Current State: " + state);
+        //Patrolling State
         if (state == State.PATROLLING) {
             moveDirection = target.position - transform.position;
             moveDirection.y = 0;
@@ -64,30 +77,91 @@ public class Elf : MonoBehaviour {
                 Patrolling();
             }
         }
+
+        //SEARCHING state
+        if (state == State.SEARCHING) {
+            Debug.Log("I'm here bitch, fuck you elf");
+            lastKnownPlayerDirection = positionMarker.transform.position - transform.position;
+            lastKnownPlayerDirection.y = 0;
+
+            if ((lastKnownPlayerDirection.normalized.x > 0 && lastKnownPlayerDirection.x < minDistance) || (lastKnownPlayerDirection.normalized.x < 0 && lastKnownPlayerDirection.x > (minDistance * -1))) {
+                Debug.Log("I'm already tracer");
+                transform.position = new Vector2(positionMarker.transform.position.x, transform.position.y);
+                StartCoroutine(InvestigationCheck(investigateCheckTime));
+            }
+
+            if (IsGrounded()) {
+                rb2d.velocity = new Vector2(lastKnownPlayerDirection.normalized.x * patrolSpeed, 0);
+            }
+            else {
+                rb2d.velocity = new Vector2(lastKnownPlayerDirection.normalized.x * patrolSpeed, rb2d.velocity.y);
+            }
+            Debug.Log("my velocity " + rb2d.velocity);
+        }
+
+        //Player detection
+        playerDirection = playerPosition.position - transform.position;
+        if (facingRight) {
+            elfPlayerDot = Vector2.Angle(playerDirection, transform.right);
+        }
+        else if (!facingRight) {
+            elfPlayerDot = Vector2.Angle(playerDirection, (transform.right * -1));
+        }
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDirection);
+        Debug.DrawRay(transform.position, playerDirection, Color.red);
+
+        if (elfPlayerDot < detectionAngle * 0.5f) {
+            Debug.Log("I see you");
+            Debug.Log(hit.collider.name);
+            Debug.Log(playerPosition.name);
+            if (hit.collider.name != playerPosition.parent.name) {
+                Debug.Log("Why you behind a wall, boo you suck");
+                state = State.PATROLLING;
+            }
+            else {
+                playerSpotted = true;
+                state = State.ATTACKING;
+            }
+        }
+
+        //Identify last known position and start searching
+        if (playerSpotted && (hit.collider.name != playerPosition.parent.name)) {
+            state = State.SEARCHING;
+            if (lastKnownPlayerPositionSampled == false) {
+                positionMarker.transform.position = playerPosition.position;
+                lastKnownPlayerPositionSampled = true;
+            }
+        }
     }
 
     //Elf will patrol an area following pathing points
     private void Patrolling() {
-        //Debug.Log("Current Move Direction: " + moveDirection.x);
-        //Debug.Log("Current Target is " + target.name);
         if ((moveDirection.normalized.x > 0 && moveDirection.x < minDistance) || (moveDirection.normalized.x < 0 && moveDirection.x > (minDistance * -1))){
-            //Debug.Log("I need to change target");
             if (targetCount == patrolPoints.Length - 1) {
-                //Debug.Log("Going back to start");
                 targetCount = 0;
             }
             else {
                 targetCount++;
-                //Debug.Log("next target num: " + targetCount);
             }
             current = target;
             areaChecked = false;
             target = patrolPoints[targetCount];
-            //Debug.Log("My new Target is: " + target.name);
         }
-        //Debug.Log(moveDirection.normalized);
-        transform.GetComponent<Rigidbody2D>().velocity = moveDirection.normalized * patrolSpeed;
-        //Debug.Log(transform.GetComponent<Rigidbody2D>().velocity);
+
+        if (IsGrounded()) {
+            rb2d.velocity = new Vector2(moveDirection.normalized.x * patrolSpeed, 0);
+        }
+        else {
+            rb2d.velocity = new Vector2(moveDirection.normalized.x * patrolSpeed, rb2d.velocity.y);
+        }
+
+        if (moveDirection.normalized.x > 0 && !facingRight) {
+            Flip();
+        } else if (moveDirection.normalized.x < 0 && facingRight) {
+            Flip();
+        }
+
     }
 
     private IEnumerator PatrolCheck(float waitTime) {
@@ -96,7 +170,22 @@ public class Elf : MonoBehaviour {
         areaChecked = true;
     }
 
-    void isGrounded() {
+    private IEnumerator InvestigationCheck(float investigateTime) {
+        yield return new WaitForSeconds(investigateTime);
+        playerSpotted = false;
+        lastKnownPlayerPositionSampled = false;
+        state = State.PATROLLING;
+    }
+
+    void Flip() {
+        facingRight = !facingRight;
+        Vector3 theScale = transform.localScale;
+        theScale.x *= -1;
+        transform.localScale = theScale;
+    }
+
+    bool IsGrounded() {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
+        return grounded;
     }
 }
