@@ -13,6 +13,7 @@ public class Elf : MonoBehaviour {
     [SerializeField] private float investigateCheckTime = 2f;
     [SerializeField] private float minDistance = 0.3f;
     [SerializeField] private float detectionAngle = 90f;
+    [SerializeField] private float visionHysteresis = 2f;
 
     public Transform[] patrolPoints;
     public Transform playerPosition;
@@ -34,7 +35,6 @@ public class Elf : MonoBehaviour {
     private bool areaChecked = false;
     private bool playerSpotted = false;
     private bool lastKnownPlayerPositionSampled = false;
-    private bool huntingPlayer = false; 
     private Vector3 moveDirection;
     private Vector2 playerDirection;
     private Vector3 lastKnownPlayerPosition;
@@ -80,12 +80,10 @@ public class Elf : MonoBehaviour {
 
         //SEARCHING state
         if (state == State.SEARCHING) {
-            Debug.Log("I'm here bitch, fuck you elf");
             lastKnownPlayerDirection = positionMarker.transform.position - transform.position;
             lastKnownPlayerDirection.y = 0;
 
             if ((lastKnownPlayerDirection.normalized.x > 0 && lastKnownPlayerDirection.x < minDistance) || (lastKnownPlayerDirection.normalized.x < 0 && lastKnownPlayerDirection.x > (minDistance * -1))) {
-                Debug.Log("I'm already tracer");
                 transform.position = new Vector2(positionMarker.transform.position.x, transform.position.y);
                 StartCoroutine(InvestigationCheck(investigateCheckTime));
             }
@@ -96,16 +94,26 @@ public class Elf : MonoBehaviour {
             else {
                 rb2d.velocity = new Vector2(lastKnownPlayerDirection.normalized.x * patrolSpeed, rb2d.velocity.y);
             }
-            Debug.Log("my velocity " + rb2d.velocity);
         }
 
         //Player detection
         playerDirection = playerPosition.position - transform.position;
         if (facingRight) {
-            elfPlayerDot = Vector2.Angle(playerDirection, transform.right);
+            if (playerSpotted) {
+                Vector2 followPlayer = Vector2.Lerp(transform.right, playerDirection, visionHysteresis * Time.deltaTime);
+                elfPlayerDot = Vector2.Angle(playerDirection, followPlayer);
+            } else {
+                elfPlayerDot = Vector2.Angle(playerDirection, transform.right);
+            }
         }
         else if (!facingRight) {
-            elfPlayerDot = Vector2.Angle(playerDirection, (transform.right * -1));
+            if (playerSpotted) {
+                Vector2 followPlayer = Vector2.Lerp((transform.right * -1), playerDirection, visionHysteresis * Time.deltaTime);
+                elfPlayerDot = Vector2.Angle(playerDirection, followPlayer);
+            }
+            else {
+                elfPlayerDot = Vector2.Angle(playerDirection, (transform.right * -1));
+            }
         }
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDirection);
