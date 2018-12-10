@@ -8,8 +8,6 @@ public class ElfArcher : Elf {
         if (state == State.ATTACKING) {
             AttackMode();
         }
-
-
     }
 
     private void AttackMode() {

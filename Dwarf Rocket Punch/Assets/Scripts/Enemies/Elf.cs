@@ -14,12 +14,14 @@ public class Elf : MonoBehaviour {
     [SerializeField] private float minDistance = 0.3f;
     [SerializeField] private float detectionAngle = 90f;
     [SerializeField] private float visionHysteresis = 2f;
+    [SerializeField] private float visionDistance = 10f;
 
+    public bool dead = false;
     public Transform[] patrolPoints;
     public Transform playerPosition;
     public GameObject positionMarker;
 
-    protected enum State {PATROLLING, ATTACKING, SEARCHING, RETREATING};
+    protected enum State {PATROLLING, ATTACKING, SEARCHING};
     protected State state;
     protected bool facingRight = true;
 
@@ -98,6 +100,7 @@ public class Elf : MonoBehaviour {
 
         //Player detection
         playerDirection = playerPosition.position - transform.position;
+        Debug.Log("Player is at " + playerDirection);
         if (facingRight) {
             if (playerSpotted) {
                 Vector2 followPlayer = Vector2.Lerp(transform.right, playerDirection, visionHysteresis * Time.deltaTime);
@@ -118,21 +121,22 @@ public class Elf : MonoBehaviour {
 
         RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDirection);
         Debug.DrawRay(transform.position, playerDirection, Color.red);
-
-        if (elfPlayerDot < detectionAngle * 0.5f) {
-            Debug.Log("I see you");
-            Debug.Log(hit.collider.name);
-            Debug.Log(playerPosition.name);
-            if (hit.collider.name != playerPosition.parent.name) {
-                Debug.Log("Why you behind a wall, boo you suck");
-                state = State.PATROLLING;
-            }
-            else {
-                playerSpotted = true;
-                state = State.ATTACKING;
+        if (playerDirection.x <= visionDistance && playerDirection.y <= visionDistance) {
+            if (elfPlayerDot < detectionAngle * 0.5f) {
+                Debug.Log("I see you");
+                Debug.Log(hit.collider.name);
+                Debug.Log(playerPosition.name);
+                if (hit.collider.name != playerPosition.parent.name) {
+                    Debug.Log("Why you behind a wall, boo you suck");
+                    state = State.PATROLLING;
+                }
+                else {
+                    playerSpotted = true;
+                    state = State.ATTACKING;
+                }
             }
         }
-
+      
         //Identify last known position and start searching
         if (playerSpotted && (hit.collider.name != playerPosition.parent.name)) {
             state = State.SEARCHING;
@@ -195,5 +199,9 @@ public class Elf : MonoBehaviour {
     bool IsGrounded() {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
         return grounded;
+    }
+
+    public void ElfHit() {
+        Debug.Log("Im dead, ah shit, I'll get you next time");
     }
 }
