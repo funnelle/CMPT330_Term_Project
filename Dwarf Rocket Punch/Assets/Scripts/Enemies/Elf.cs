@@ -30,7 +30,12 @@ public class Elf : MonoBehaviour {
     private bool areaChecked = false;
     private Vector3 moveDirection;
     private float elfPlayerDot;
-    private Vector2 playerDirection;
+    protected Vector2 playerDirection;
+    //animation controllers
+    protected Animator mainAnimator;
+    protected Animator armAnimator;
+    //particle system
+    protected ParticleSystem arrowParticle;
 
     // Use this for initialization
     protected virtual void Start() {
@@ -44,7 +49,12 @@ public class Elf : MonoBehaviour {
         target = patrolPoints[1];
         current = patrolPoints[0];
         transform.position = current.position;
-        
+
+        //grab animators
+        mainAnimator = GameObject.Find("ElfAnimationRig").GetComponent<Animator>();
+        armAnimator = GameObject.Find("ElfAnimationRig/Elf_torso/Elf_arms/ElfArmAnimationController").GetComponent<Animator>();
+        //grab particle system
+        arrowParticle = GameObject.Find("ElfAnimationRig/Elf_torso/Elf_arms/ElfArmAnimationController").GetComponent<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -92,6 +102,16 @@ public class Elf : MonoBehaviour {
             else {
                 state = State.ATTACKING;
             }
+        }
+
+        //animations
+        if (Mathf.Abs(rb2d.velocity.x) > 0f) {
+            mainAnimator.SetBool("isRunning", true);
+            armAnimator.SetBool("isRunning", true);
+        }
+        else {
+            mainAnimator.SetBool("isRunning", false);
+            armAnimator.SetBool("isRunning", false);
         }
     }
 
