@@ -22,7 +22,9 @@ using UnityEngine;
 /// Author: Evan Funnell (EVF)
 /// Editor: Eamonn McCormick    (EPM)
 /// 
+
 public class DwarfController : MonoBehaviour {
+
     //Punch speed + range
     public float punchRange = 20f;
     public float punchDelay = 0f;
@@ -49,9 +51,14 @@ public class DwarfController : MonoBehaviour {
     public bool allowMovement = true;
     public bool onGround = true;
     public bool isRocketJumping;
+
+    public bool allowWallJump = false;
     public float groundCheckRadius = 0.1f;
     public float maxSpeed = 10f;
-    public float airSpeed = 1f;
+    public float airSpeed = 0.28f;
+    public float jumpForce = 15f;
+    public float slideTime = 1f;
+
     public LayerMask ground;
 
     //Dwarf movement - Private variables
@@ -76,19 +83,19 @@ public class DwarfController : MonoBehaviour {
     /// 2018-10-12  EVF     Initialized variables
     /// 2018-12-2   EPM     Added particle system instantiation
     /// 
-    void Start()
-    {   
+    void Start(){
+
         //Let his punches leave his own collider
         Physics2D.queriesStartInColliders = false;
-        
+
         //Get the components we need for moving the player
         rb2d = this.GetComponent<Rigidbody2D>();
         groundCheck = GameObject.Find("/Dwarf/GroundCheck").GetComponent<Transform>();
-        
+
         //Get the componenets we need for animation the player
         mainAnimator = GameObject.Find("/Dwarf/DwarfAnimationRig").GetComponent<Animator>();
         armAnimator = GameObject.Find("/Dwarf/DwarfAnimationRig/Torso/Arms/DwarfArmAnimationRig").GetComponent<Animator>();
-        
+
         //Get the component we need to change with mouse direction
         dwarfArm = GameObject.Find("/Dwarf/DwarfAnimationRig/Torso/Arms").GetComponent<Transform>();
 
@@ -104,6 +111,7 @@ public class DwarfController : MonoBehaviour {
     }
         
 
+
     /// <summary>
     /// Gets input and moves player
     /// </summary>
@@ -112,6 +120,7 @@ public class DwarfController : MonoBehaviour {
     /// 2018-11-7   EPM     Added mouse click code
     /// 
     void Update() {
+
         //Let the player move, if possible.
         movementSpeed = Input.GetAxis("Horizontal");
         onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
@@ -123,7 +132,11 @@ public class DwarfController : MonoBehaviour {
         if (!onGround)
         {
             rb2d.AddForce(new Vector2(movementSpeed * airSpeed, 0), ForceMode2D.Impulse);
+            //If x velocity becomes greater than maxSpeed, set it to maxSpeed
+            if (Mathf.Abs(rb2d.velocity.x) > maxSpeed)
+                rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
         }
+
         //If the player is able to, allow them to punch
         timeSinceFire += Time.deltaTime;
         if (Input.GetButton("Fire1") && timeSinceFire >= punchDelay)
@@ -151,10 +164,10 @@ public class DwarfController : MonoBehaviour {
     /// 
     /// 2018-10-12  EVF     Added ground check sphere
     /// 
-    void FixedUpdate() {
+    void FixedUpdate()
+    {
         //create a sphere that checks if we are on ground
         /*onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
-
         if (onGround)
         {
             rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
@@ -164,23 +177,53 @@ public class DwarfController : MonoBehaviour {
             rb2d.AddForce(new Vector2(movementSpeed * airSpeed, 0), ForceMode2D.Impulse);
         }
         */
+        if (Input.GetButtonDown("Jump"))
+        {
+            if (onGround)
+            {
+                //Set y velocity to 0 and add jumping force
+                rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
+                rb2d.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            }
+
+            else if (allowWallJump)
+            {
+                //Set velocity to 0 and add a force to impulse him off the wall depending facing right or left
+                rb2d.velocity = Vector2.zero;
+                if (!facingRight)
+                {
+                    rb2d.AddForce(new Vector2(-jumpForce / 2, jumpForce), ForceMode2D.Impulse);
+                }
+                if (facingRight)
+                {
+                    rb2d.AddForce(new Vector2(jumpForce / 2, jumpForce), ForceMode2D.Impulse);
+                }
+
+                allowWallJump = false;
+            }
+        }
+        
         if (Mathf.Abs(rb2d.velocity.x) > 0.01f) {
             mainAnimator.SetBool("isRunning", true);
         }
-        else {
+        else
+        {
             mainAnimator.SetBool("isRunning", false);
         }
 
-        if (rb2d.velocity.x < 0 && !facingRight) {
+        if (rb2d.velocity.x < 0 && !facingRight)
+        {
             Flip();
         }
-        else if (rb2d.velocity.x > 0 && facingRight) {
+        else if (rb2d.velocity.x > 0 && facingRight)
+        {
             Flip();
         }
     }
 
     //Debug function to test OnGround check
-    void OnDrawGizmosSelected() {
+    void OnDrawGizmosSelected()
+    {
         // Draw a yellow sphere at the transform's position
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(groundCheck.position, groundCheckRadius);
@@ -194,7 +237,8 @@ public class DwarfController : MonoBehaviour {
     /// 
     /// 2018-11-7   EPM     Added flip code
     /// 
-    void Flip() {
+    void Flip()
+    {
         facingRight = !facingRight;
         /*foreach (GameObject spriteObject in spriteObjects)
         {
@@ -274,5 +318,59 @@ public class DwarfController : MonoBehaviour {
         explosionPS.Play();
         cartridgePS.transform.position = dwarfArm.transform.position;
         cartridgePS.Play();
+    }
+
+    /// <summary>
+    /// Performs actions after a collision
+    /// </summary>
+    /// <param name="collision">
+    /// A collider
+    /// </param>
+    /// 
+    /// 2018-11-20 RJD      Added wall jump code
+    /// 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Wall")
+        {
+            allowWallJump = true;
+            rb2d.velocity = new Vector2(0, rb2d.velocity.y);
+            StopAllCoroutines();
+            IEnumerator coroutine = cancelWallJump(slideTime);
+            StartCoroutine(coroutine);
+        }
+    }
+
+    /// <summary>
+    /// Performs actions after ceasing contact with a collider
+    /// </summary>
+    /// <param name="collision">
+    /// A collider
+    /// </param>
+    /// 
+    /// 2018-11-20      Added wall jump code
+    /// 
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Wall")
+            allowWallJump = false;
+    }
+
+    /// <summary>
+    /// Coroutine to take away the ability to wall jump after sticking to a wall for a period of time
+    /// </summary>
+    /// <param name="slideTime">
+    /// The amount of time before wall jump is disabled
+    /// </param>
+    /// <returns>
+    /// A WaitForSeconds()
+    /// </returns>
+    /// 
+    /// 2018-11-20      Added basic wall jump cancelling
+    /// 
+    private IEnumerator cancelWallJump(float slideTime)
+    {
+        yield return new WaitForSeconds(slideTime);
+        allowWallJump = false;
     }
 }
