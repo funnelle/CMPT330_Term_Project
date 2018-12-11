@@ -20,6 +20,7 @@ using UnityEngine;
 /// groundCheck         Transform position of OverlapCircle
 /// 
 /// Author: Evan Funnell (EVF)
+/// Editor: Eamonn McCormick    (EPM)
 /// 
 
 public class DwarfController : MonoBehaviour {
@@ -71,11 +72,16 @@ public class DwarfController : MonoBehaviour {
     private bool facingRight;
     private float movementSpeed;
 
+    //Particle systems
+    public ParticleSystem explosionPS;
+    public ParticleSystem cartridgePS;
+
     /// <summary>
     /// Initialize variables at game start
     /// </summary>
     /// 
     /// 2018-10-12  EVF     Initialized variables
+    /// 2018-12-2   EPM     Added particle system instantiation
     /// 
     void Start(){
 
@@ -87,17 +93,21 @@ public class DwarfController : MonoBehaviour {
         groundCheck = GameObject.Find("/Dwarf/GroundCheck").GetComponent<Transform>();
 
         //Get the componenets we need for animation the player
-        mainAnimator = GameObject.Find("/Dwarf/MainAnimationRig").GetComponent<Animator>();
-        armAnimator = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms/ArmAnimationRig").GetComponent<Animator>();
+        mainAnimator = GameObject.Find("/Dwarf/DwarfAnimationRig").GetComponent<Animator>();
+        armAnimator = GameObject.Find("/Dwarf/DwarfAnimationRig/Torso/Arms/DwarfArmAnimationRig").GetComponent<Animator>();
 
         //Get the component we need to change with mouse direction
-        dwarfArm = GameObject.Find("/Dwarf/MainAnimationRig/Torso/Arms").GetComponent<Transform>();
+        dwarfArm = GameObject.Find("/Dwarf/DwarfAnimationRig/Torso/Arms").GetComponent<Transform>();
 
         //Get the component that is the origin of the dwarf's punch raycast.
         dwarfPunchOrigin = GameObject.Find("/Dwarf/RocketLocation/").GetComponent<Transform>();
 
         //Collect our sprites for our flip function. Then we can go through them and flip them as needed.
         spriteObjects = GameObject.FindGameObjectsWithTag("PlayerSprite");
+
+        //Instantiate particle systems
+        explosionPS = Instantiate(explosionPS);
+        cartridgePS = Instantiate(cartridgePS);
     }
         
 
@@ -140,7 +150,12 @@ public class DwarfController : MonoBehaviour {
         armDirection = new Vector2(mouseLocation.x - transform.position.x, mouseLocation.y - transform.position.y) * directionModifier;
         dwarfArm.right = armDirection;
         //play arm animation on click
-        armAnimator.SetBool("onClick", Input.GetMouseButtonUp(0));
+        if (Input.GetMouseButtonUp(0)) {
+            armAnimator.Play("Dwarf_arm_blast_1");
+        }
+        //armAnimator.SetBool("onClick", Input.GetMouseButtonUp(0));
+
+        Debug.Log(explosionPS);
     }
 
     /// <summary>
@@ -284,6 +299,7 @@ public class DwarfController : MonoBehaviour {
     /// <param name="explosionPos">The origin of the explosion (A vector2 location.)</param>
     /// <param name="explosionRadius">The width of the explosion. (A float.)</param>
     /// EW 2018-11-07
+    /// EPM 2018-12-2   Added particle effect code
     void DwarfExplode(Rigidbody2D expVictim, float explosionForce, Vector2 explosionPos, float explosionRadius)
     {
         Vector2 ExpDir = (Vector2)expVictim.transform.position - explosionPos;
@@ -294,6 +310,14 @@ public class DwarfController : MonoBehaviour {
 
         expVictim.velocity = (ExpDir * (explosionStrength * explosionForce));
         //Tell the engine to simply shove them in our desired direction, no fuss.
+
+        //play the particle effect
+        //note: even though these PS's are part of the script, they do not move around with it, and must therefore be moved into
+        //the correct position before being played
+        explosionPS.transform.position = explosionPos;
+        explosionPS.Play();
+        cartridgePS.transform.position = dwarfArm.transform.position;
+        cartridgePS.Play();
     }
 
     /// <summary>

@@ -1,0 +1,267 @@
+fileFormatVersion: 2
+guid: fcfb62101042a4f3ba957dd12f3f8c8b
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Elf_torso
+    21300002: Elf_head
+    21300004: Elf_arm_upper
+    21300006: Elf_ponytail
+    21300008: Elf_arm_lower
+    21300010: Elf_leg_upper
+    21300012: Elf_leg_lower
+    21300014: Elf_sash
+  externalObjects: {}
+  serializedVersion: 7
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Elf_torso
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 108
+        width: 90
+        height: 264
+      alignment: 9
+      pivot: {x: 0.55852765, y: 0.02446267}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e1a256f59f034dfcac0613a9e4a014d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Elf_head
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 282
+        width: 108
+        height: 84
+      alignment: 9
+      pivot: {x: 0.6544479, y: 0.18645877}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48d369f42f0404bd5b4dd694b2c21aee
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Elf_arm_upper
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 234
+        width: 66
+        height: 126
+      alignment: 9
+      pivot: {x: 0.44679353, y: 0.8205084}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a0fa577f0b7b4fbc89c0852572faecf
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Elf_ponytail
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 168
+        width: 60
+        height: 60
+      alignment: 9
+      pivot: {x: 0.86579794, y: 0.13420156}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a56bffa94cb342f4b1c3e26075cb57a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Elf_arm_lower
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 126
+        width: 54
+        height: 90
+      alignment: 9
+      pivot: {x: 0.36993918, y: 0.9096934}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d44ac4b5f66504fd2bae1b880b61ea3f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Elf_leg_upper
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 12
+        width: 54
+        height: 84
+      alignment: 9
+      pivot: {x: 0.48374248, y: 0.79263806}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b09f5f94c59984364aeafde47652a26c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Elf_leg_lower
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 12
+        width: 60
+        height: 72
+      alignment: 9
+      pivot: {x: 0.33904877, y: 0.91457057}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a80d85056b4cf4293a12496e57dfecaf
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Elf_sash
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 12
+        width: 54
+        height: 90
+      alignment: 9
+      pivot: {x: 0.7276077, y: 0.83165675}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e2c037e19e5045b78273124b335aeca
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: e55d0e64b1a97434aad2afb1021f0274
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
