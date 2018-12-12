@@ -2,12 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class inherits from Elf and is used to create a specific class of elf.
+/// In this case, an archer.
+/// </summary>
+/// 
+/// Author: Evan Funnell    EVF
+/// 
 public class ElfArcher : Elf {
 
     protected override void Start() {
         base.Start();
     }
 
+    /// <summary>
+    /// Update function inherits from base class update, and adds a new state check to perform actions 
+    /// needed to attack the player
+    /// </summary>
+    /// 
+    /// 2018-12-05  EVF     Initial State
+    /// 2018-12-08  EPM     Added Arm Animator
+    /// 
     protected override void Update() {
         base.Update();
         if (state == State.ATTACKING) {
@@ -18,6 +33,12 @@ public class ElfArcher : Elf {
         }
     }
 
+    /// <summary>
+    /// Fires an arrow at the player
+    /// </summary>
+    /// 
+    /// 2018-12-08  EPM     Added Animations and arrow shooting
+    /// 
     private void AttackMode() {
         mainAnimator.Play("Elf_archer_attack");
         Vector3 delta = playerPosition.position - transform.position;
