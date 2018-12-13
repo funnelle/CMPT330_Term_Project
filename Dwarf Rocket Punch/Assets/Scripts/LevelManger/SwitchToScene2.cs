@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class SwitchToScene2 : SceneController {
+public class SwitchToScene2 : MonoBehaviour {
 
     //public SceneController sceneController;
     public bool switchScene = false;
@@ -14,11 +14,6 @@ public class SwitchToScene2 : SceneController {
 
     }
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
