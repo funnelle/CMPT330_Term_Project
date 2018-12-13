@@ -6,6 +6,8 @@ TagManager:
   tags:
   - PlayerSprite
   - ReSpawnArea
+  - Wall
+  - EndOfLevelZone
   layers:
   - Default
   - TransparentFX

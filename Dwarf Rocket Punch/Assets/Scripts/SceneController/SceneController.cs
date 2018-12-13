@@ -23,7 +23,7 @@ public class SceneController : MonoBehaviour {
     public CanvasGroup faderCanvasGroup;
     public float fadeDuration = 1f;
     //public string startingSceneName = "MechanicsTestMap";
-    public string startingSceneName = "TestLevel";
+    public string startingSceneName = "TestLevel2";
     public string activeScene;
 
     private bool isFading;
@@ -41,6 +41,7 @@ public class SceneController : MonoBehaviour {
 
         StartCoroutine(Fade(0f));
 	}
+
 
     /// <summary>
     /// Called to change scene to given scene
