@@ -10,6 +10,6 @@ public class ElfWarrior : Elf {
         }
     }
     private void AttackMode() {
-        Debug.Log("I'm attacking");
+        //Debug.Log("I'm attacking");
     }
 }

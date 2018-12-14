@@ -39,6 +39,9 @@ public class ElfArcher : Elf {
     protected override void Update() {
         base.Update();
         if (state == State.ATTACKING) {
+
+            mainAnimator.SetBool("isAttacking", true);
+            armAnimator.SetBool("isAttacking", true);
             AttackMode();
         }
         else {
@@ -60,11 +63,10 @@ public class ElfArcher : Elf {
         Vector3 delta = playerPosition.position - transform.position;
         //rotate the animator to face the player
         float theta = Mathf.Atan2(delta.y, delta.x);
-        enemyDirection = new Vector3(0, 0, theta * Mathf.Rad2Deg + 90);
+
+        enemyDirection = facingRight ? new Vector3(0, 0, theta * Mathf.Rad2Deg + 90) : new Vector3(0, 0, (theta * Mathf.Rad2Deg) - 90);
 
         armAnimator.transform.localRotation = Quaternion.Euler(enemyDirection);
-        mainAnimator.SetBool("isAttacking", true);
-        armAnimator.SetBool("isAttacking", true);
 
 
         if (timeSinceAttack >= attackDelay) Attack();
@@ -75,6 +77,7 @@ public class ElfArcher : Elf {
         timeSinceAttack = 0;
 
         ElfArrow arrow = Instantiate(arrowPrefab, armAnimator.transform, false);
+
         arrow.arrowLifeDelay = arrowLifeDelay;
 
         arrow.transform.parent = null;
@@ -83,9 +86,6 @@ public class ElfArcher : Elf {
 
         Physics2D.IgnoreCollision(GetComponent<Collider2D>(), arrow.GetComponent<Collider2D>());
 
-        arrowRB.velocity = new Vector2(arrowVelocity, 0);
-
-
-
+        arrowRB.velocity = facingRight ? new Vector2(arrowVelocity, 0) : new Vector2(-arrowVelocity,0);
     }
 }

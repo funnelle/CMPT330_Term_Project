@@ -70,6 +70,8 @@ public class Elf : MonoBehaviour {
     public Transform[] patrolPoints;
     public Transform playerPosition;
     public GameObject positionMarker;
+    public GameObject mainAnimatorGO;
+    public GameObject armAnimatorGO;
 
     protected enum State {PATROLLING, ATTACKING, SEARCHING};
     protected State state;
@@ -115,8 +117,8 @@ public class Elf : MonoBehaviour {
         transform.position = current.position;
 
         //grab animators
-        mainAnimator = GameObject.Find("ElfAnimationRig").GetComponent<Animator>();
-        armAnimator = GameObject.Find("ElfAnimationRig/Elf_torso/ElfArmAnimationController").GetComponent<Animator>();
+        mainAnimator = mainAnimatorGO.GetComponent<Animator>();
+        armAnimator = armAnimatorGO.GetComponent<Animator>();
 
     }
 
@@ -128,7 +130,7 @@ public class Elf : MonoBehaviour {
     /// 2018-12-01  EVF     Added finite state machine
     /// 
     protected virtual void Update() {
-        Debug.Log("My Current State: " + state);
+        //Debug.Log("My Current State: " + state);
         //Patrolling State
         if (state == State.PATROLLING) {
             moveDirection = target.position - transform.position;
@@ -317,6 +319,6 @@ public class Elf : MonoBehaviour {
     /// </summary>
     public void ElfHit() {
         dead = true;
-        Debug.Log("Im dead, ah shit, I'll get you next time");
+        //Debug.Log("Im dead, ah shit, I'll get you next time");
     }
 }
