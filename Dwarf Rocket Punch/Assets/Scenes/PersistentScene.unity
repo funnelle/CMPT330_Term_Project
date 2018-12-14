@@ -147,6 +147,7 @@ MonoBehaviour:
   sceneController: {fileID: 1788456717}
   offset: {x: 0, y: 0, z: -10}
   HYSTERESIS: 4
+  playerFound: 0
 --- !u!81 &684845663
 AudioListener:
   m_ObjectHideFlags: 0
@@ -445,6 +446,47 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1313041398}
   m_CullTransparentMesh: 0
+--- !u!1 &1347396108
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1347396109}
+  - component: {fileID: 1347396110}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1347396109
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1347396108}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 229.83022, y: 25.478693, z: -3.78789}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1347396110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1347396108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1efd1f5c4a70a2f4fa274e18441dfda7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneController: {fileID: 1788456717}
 --- !u!1 &1788456717
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,6 +518,7 @@ MonoBehaviour:
   fadeDuration: 1
   startingSceneName: MechanicsTestMap
   activeScene: 
+  followCam: {fileID: 684845661}
 --- !u!4 &1788456719
 Transform:
   m_ObjectHideFlags: 0

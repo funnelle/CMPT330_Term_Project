@@ -25,10 +25,10 @@ public class LooseFollow : MonoBehaviour {
     public GameObject sceneController;
     public Vector3 offset;
     public float HYSTERESIS = 2f;
+    public bool playerFound = false;
 
     private Transform player;
     private SceneController sceneControllerScript;
-    private bool playerFound = false;
     private string activeScene;
 
     /// <summary>
