@@ -53,8 +53,7 @@ public class Elf : MonoBehaviour {
         //grab animators
         mainAnimator = GameObject.Find("ElfAnimationRig").GetComponent<Animator>();
         armAnimator = GameObject.Find("ElfAnimationRig/Elf_torso/Elf_arms/ElfArmAnimationController").GetComponent<Animator>();
-        //grab particle system
-        arrowParticle = GameObject.Find("ElfAnimationRig/Elf_torso/Elf_arms/ElfArmAnimationController").GetComponent<ParticleSystem>();
+
     }
 
     // Update is called once per frame
