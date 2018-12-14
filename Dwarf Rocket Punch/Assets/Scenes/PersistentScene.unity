@@ -516,7 +516,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   faderCanvasGroup: {fileID: 1313041400}
   fadeDuration: 1
-  startingSceneName: MechanicsTestMap
+  startingSceneName: TestLevel
   activeScene: 
   followCam: {fileID: 684845661}
 --- !u!4 &1788456719

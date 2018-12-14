@@ -43,6 +43,8 @@ public class ElfArcher : Elf {
         }
         else {
             armAnimator.transform.rotation = Quaternion.Euler(0, 0, 0);
+            mainAnimator.SetBool("isAttacking", false);
+            armAnimator.SetBool("isAttacking", false);
         }
 
         timeSinceAttack += Time.deltaTime;
@@ -55,14 +57,14 @@ public class ElfArcher : Elf {
     /// 2018-12-08  EPM     Added Animations and arrow shooting
     /// 
     private void AttackMode() {
-        mainAnimator.Play("Elf_archer_attack");
         Vector3 delta = playerPosition.position - transform.position;
         //rotate the animator to face the player
         float theta = Mathf.Atan2(delta.y, delta.x);
         enemyDirection = new Vector3(0, 0, theta * Mathf.Rad2Deg + 90);
 
         armAnimator.transform.localRotation = Quaternion.Euler(enemyDirection);
-        armAnimator.Play("Elf_archer_arm_attack");
+        mainAnimator.SetBool("isAttacking", true);
+        armAnimator.SetBool("isAttacking", true);
 
 
         if (timeSinceAttack >= attackDelay) Attack();

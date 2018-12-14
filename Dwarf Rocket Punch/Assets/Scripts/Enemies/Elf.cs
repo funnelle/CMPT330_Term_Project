@@ -116,7 +116,7 @@ public class Elf : MonoBehaviour {
 
         //grab animators
         mainAnimator = GameObject.Find("ElfAnimationRig").GetComponent<Animator>();
-        armAnimator = GameObject.Find("ElfAnimationRig/Elf_torso/Elf_arms/ElfArmAnimationController").GetComponent<Animator>();
+        armAnimator = GameObject.Find("ElfAnimationRig/Elf_torso/ElfArmAnimationController").GetComponent<Animator>();
 
     }
 
