@@ -5,8 +5,8 @@ using System;
 
 public class SwitchToScene2 : MonoBehaviour {
 
-    //public SceneController sceneController;
     public bool switchScene = false;
+    public String transitionToLevel;
 
     // Use this for initialization
     void Start () {
@@ -20,7 +20,6 @@ public class SwitchToScene2 : MonoBehaviour {
         {
             Debug.Log("Entering New Scene");
             switchScene = true;
-            //GetComponent<SceneController>().FadeAndLoadScene("TestLevel2");        
         }
     }
 

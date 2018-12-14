@@ -2,22 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 
+/// </summary>
 public class LevelTransition : MonoBehaviour {
     public GameObject sceneController;
-    //public GameObject EndOfLevelZone;
+    private SwitchToScene2 swapScript;
+    public GameObject swapSceneObject;
+
+    private SceneController sceneControllerScript;
+    private string activeScene;
 
     // Use this for initialization
     void Start () {
-		
+        sceneControllerScript = sceneController.GetComponent<SceneController>();
+
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (GameObject.Find("EndOfLevelZone").GetComponent<SwitchToScene2>().switchScene)
+        if (activeScene != "")
         {
-            Debug.Log("In the game manager");
+            swapScript = GameObject.Find("EndOfLevelZone").GetComponent<SwitchToScene2>();
+            if (swapScript.switchScene)
+            {
+                Debug.Log("Switching to next scener");
 
-            sceneController.GetComponent<SceneController>().FadeAndLoadScene("TestLevel2");
+                sceneController.GetComponent<SceneController>().FadeAndLoadScene(swapScript.transitionToLevel);
+            }
+
         }
 		
 	}
