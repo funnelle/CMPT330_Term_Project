@@ -10,11 +10,6 @@ public class ElfArrow : MonoBehaviour {
 	void Start () {
         StartCoroutine(ArrowLife(arrowLifeDelay));
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     private IEnumerator ArrowLife(float delay) {
         //Debug.Log("arrow is alive");
