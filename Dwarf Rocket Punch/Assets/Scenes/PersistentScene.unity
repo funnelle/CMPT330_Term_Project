@@ -487,6 +487,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneController: {fileID: 1788456717}
+  swapSceneObject: {fileID: 0}
 --- !u!1 &1788456717
 GameObject:
   m_ObjectHideFlags: 0
@@ -516,7 +517,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   faderCanvasGroup: {fileID: 1313041400}
   fadeDuration: 1
-  startingSceneName: MechanicsTestMap
+  startingSceneName: TestLevel
   activeScene: 
   followCam: {fileID: 684845661}
 --- !u!4 &1788456719

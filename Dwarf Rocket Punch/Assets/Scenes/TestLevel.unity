@@ -14243,10 +14243,10 @@ Transform:
   - {fileID: 942744807}
   - {fileID: 1319862546}
   - {fileID: 1304949471}
-  - {fileID: 385188401}
   - {fileID: 1998129680}
   - {fileID: 644021554}
   - {fileID: 1594701224}
+  - {fileID: 385188401}
   - {fileID: 921097590}
   - {fileID: 339078006}
   m_Father: {fileID: 0}
@@ -27430,7 +27430,7 @@ Transform:
   m_LocalScale: {x: 0.9126361, y: 0.7433083, z: 1}
   m_Children: []
   m_Father: {fileID: 326365099}
-  m_RootOrder: 967
+  m_RootOrder: 966
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 900}
 --- !u!212 &644021555
 SpriteRenderer:
@@ -45875,6 +45875,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   switchScene: 0
+  transitionToLevel: TestLevel2
 --- !u!61 &1082186221
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -66258,7 +66259,7 @@ Transform:
   m_LocalScale: {x: -0.8018443, y: 0.7433083, z: 1}
   m_Children: []
   m_Father: {fileID: 326365099}
-  m_RootOrder: 968
+  m_RootOrder: 967
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 900}
 --- !u!212 &1594701225
 SpriteRenderer:
@@ -83880,7 +83881,7 @@ Transform:
   m_LocalScale: {x: -0.8018443, y: 0.5857425, z: 1}
   m_Children: []
   m_Father: {fileID: 326365099}
-  m_RootOrder: 966
+  m_RootOrder: 965
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 900}
 --- !u!212 &1998129681
 SpriteRenderer:
