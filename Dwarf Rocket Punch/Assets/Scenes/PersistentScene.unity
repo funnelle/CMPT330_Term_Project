@@ -146,6 +146,7 @@ MonoBehaviour:
   sceneController: {fileID: 1788456717}
   offset: {x: 0, y: 0, z: -10}
   HYSTERESIS: 4
+  playerFound: 0
 --- !u!81 &684845663
 AudioListener:
   m_ObjectHideFlags: 0
@@ -419,8 +420,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   faderCanvasGroup: {fileID: 1313041400}
   fadeDuration: 1
-  startingSceneName: TestLevel2
+  startingSceneName: TestLevel
   activeScene: 
+  followCam: {fileID: 684845661}
 --- !u!4 &1788456719
 Transform:
   m_ObjectHideFlags: 0

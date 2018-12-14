@@ -25,8 +25,10 @@ public class SceneController : MonoBehaviour {
     //public string startingSceneName = "MechanicsTestMap";
     public string startingSceneName = "TestLevel2";
     public string activeScene;
+    public GameObject followCam;
 
     private bool isFading;
+    private LooseFollow looseCameraScript;
 
 	/// <summary>
     /// Initializes instance variables, loads starting scene and fades out image
@@ -35,6 +37,7 @@ public class SceneController : MonoBehaviour {
     /// 2018-10-11  EVF     Initial State
     /// 
     private IEnumerator Start () {
+        looseCameraScript = followCam.GetComponent<LooseFollow>();
         faderCanvasGroup.alpha = 1f;
 
         yield return StartCoroutine(LoadSceneAndSetActive(startingSceneName));
@@ -51,6 +54,7 @@ public class SceneController : MonoBehaviour {
     /// 2018-10-11  EVF     Initial State
     /// 
     public void FadeAndLoadScene(string sceneName) {
+        looseCameraScript.playerFound = false;
         if (!isFading) {
             StartCoroutine(FadeAndSwitchScenes(sceneName));
         }
