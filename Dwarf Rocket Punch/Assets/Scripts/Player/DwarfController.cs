@@ -155,7 +155,7 @@ public class DwarfController : MonoBehaviour {
         }
         //armAnimator.SetBool("onClick", Input.GetMouseButtonUp(0));
 
-        Debug.Log(explosionPS);
+        //Debug.Log(explosionPS);
     }
 
     /// <summary>
@@ -305,7 +305,7 @@ public class DwarfController : MonoBehaviour {
         Vector2 ExpDir = (Vector2)expVictim.transform.position - explosionPos;
         ExpDir = ExpDir.normalized;
         float explosionDistance = Vector2.Distance(explosionPos, ExpDir);
-        Debug.Log(explosionDistance);
+        //Debug.Log(explosionDistance);
         float explosionStrength = 1f;
 
         expVictim.velocity = (ExpDir * (explosionStrength * explosionForce));

@@ -8,6 +8,8 @@ TagManager:
   - ReSpawnArea
   - Wall
   - EndOfLevelZone
+  - Elf
+  - Arrow
   layers:
   - Default
   - TransparentFX

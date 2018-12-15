@@ -11,8 +11,21 @@ using UnityEngine;
 /// 
 public class ElfArcher : Elf {
 
+    public float arrowVelocity;
+    public float attackDelay;
+    public float arrowLifeDelay;
+    public ElfArrow arrowPrefab;
+
+    private Vector3 enemyDirection;
+    private float timeSinceAttack;
+
     protected override void Start() {
+        //arrows ignore elf
+        //Physics2D.queriesStartInColliders = false;
+
         base.Start();
+
+
     }
 
     /// <summary>
@@ -26,11 +39,18 @@ public class ElfArcher : Elf {
     protected override void Update() {
         base.Update();
         if (state == State.ATTACKING) {
+
+            mainAnimator.SetBool("isAttacking", true);
+            armAnimator.SetBool("isAttacking", true);
             AttackMode();
         }
         else {
             armAnimator.transform.rotation = Quaternion.Euler(0, 0, 0);
+            mainAnimator.SetBool("isAttacking", false);
+            armAnimator.SetBool("isAttacking", false);
         }
+
+        timeSinceAttack += Time.deltaTime;
     }
 
     /// <summary>
@@ -40,12 +60,32 @@ public class ElfArcher : Elf {
     /// 2018-12-08  EPM     Added Animations and arrow shooting
     /// 
     private void AttackMode() {
-        mainAnimator.Play("Elf_archer_attack");
         Vector3 delta = playerPosition.position - transform.position;
         //rotate the animator to face the player
         float theta = Mathf.Atan2(delta.y, delta.x);
-        armAnimator.transform.localRotation = Quaternion.Euler(0, 0, theta * Mathf.Rad2Deg + 90);
-        armAnimator.Play("Elf_archer_arm_attack");
-        if (!arrowParticle.isPlaying) arrowParticle.Play();
+
+        enemyDirection = facingRight ? new Vector3(0, 0, theta * Mathf.Rad2Deg + 90) : new Vector3(0, 0, (theta * Mathf.Rad2Deg) - 90);
+
+        armAnimator.transform.localRotation = Quaternion.Euler(enemyDirection);
+
+
+        if (timeSinceAttack >= attackDelay) Attack();
+
+    }
+
+    private void Attack() {
+        timeSinceAttack = 0;
+
+        ElfArrow arrow = Instantiate(arrowPrefab, armAnimator.transform, false);
+
+        arrow.arrowLifeDelay = arrowLifeDelay;
+
+        arrow.transform.parent = null;
+
+        Rigidbody2D arrowRB = arrow.GetComponent<Rigidbody2D>();
+
+        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), arrow.GetComponent<Collider2D>());
+
+        arrowRB.velocity = facingRight ? new Vector2(arrowVelocity, 0) : new Vector2(-arrowVelocity,0);
     }
 }
