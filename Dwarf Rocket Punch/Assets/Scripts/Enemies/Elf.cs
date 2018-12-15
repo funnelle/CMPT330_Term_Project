@@ -191,7 +191,6 @@ public class Elf : MonoBehaviour {
 
         //Shoots raycast to determine if player is visible or behind something
         RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDirection);
-        Debug.DrawRay(transform.position, playerDirection, Color.red);
         if (playerDirection.x <= visionDistance && playerDirection.y <= visionDistance) {
             //if player angle is less than half the detection angle, player is visible, but may still be behind a wall
             if (elfPlayerAngle < detectionAngle * 0.5f) {
