@@ -99,7 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f9c7e477868a4ae2800097af7d4207a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrowLifeDelay: 0
+  arrowLifeDelay: 2
+  deathCameraTime: 1
 --- !u!212 &212770747742266242
 SpriteRenderer:
   m_ObjectHideFlags: 1
