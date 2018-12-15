@@ -295,8 +295,13 @@ public class DwarfController : MonoBehaviour
             //Get colliders in the explosion radius and apply explosion force to them
             Collider2D[] hitObjects = Physics2D.OverlapCircleAll(explosionPos, explosionRadius);
             foreach (Collider2D hit in hitObjects)
-            {
+            {   
                 Rigidbody2D expVictim = hit.GetComponent<Rigidbody2D>();
+                if(hit.gameObject.tag == "Elf" ) //Kill the elf!
+                {
+                    Destroy(hit.gameObject); //Just pop him. Obviously you'd want an animation to play typically.
+                    continue;
+                }
                 if (expVictim != null)
                 {
                     print("WE'VE HIT");
