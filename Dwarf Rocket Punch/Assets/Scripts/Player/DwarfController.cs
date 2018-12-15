@@ -3,78 +3,80 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Controls Dwarf (Player) movement and ground check
+/// This script controls the movement of the dwarf, including jumping. It also handles
+/// the rocket jump explosions and the flipping of the dwarf.
 /// </summary>
 /// 
-/// Field               Description
+/// Variables
 /// 
 /// Punch Speed + Range
-/// punchRange          How far away from ground/wall the punch can be
-/// punchDelay          Delay between each punch
-/// 
-/// Explosive Size + Force
-/// explosionRadius     Radius of the rocket explosion
-/// explosionForce      Force applied to objects inside the explosion
-/// 
-/// Firing Variables, Raycasts, and Checks
-/// ground              LayerMask specifying what is ground for groundCheck
-/// timeSinceFire       Time since last punch
-/// hitCheck            RayCastHit at point of dwarf punch
-/// dwarfPunch          Ray originating from dwarfPunchOrigin to some point
-/// dwarfPunchOrigin    Transform of where dwarfPunch will begin
-/// explosionPos        Vector2 point where a rocket explosion happens
-/// 
+/// punchRange               How far away the dwarf can be from wall/ground for the punch to hit
+/// punchDelay               How long dwarf must wait between punches
+
+/// Explosion Size + Force
+/// explosionRadius          Radius of the rocket explosion
+/// explosionForce           Force applied to any object insde the explosion
+///
+/// Firing Variables, Raycasts and Checks
+/// timeSinceFire            Time since last punch
+/// hitCheck                 RayCastHit of rocket punch
+/// dwarfPunch               Ray from dwarfPunchOrigin to where the dwarf aims at
+/// dwarfPunchOrigin         Origin of dwarfPunch
+/// explosionPos             Where the explosion originates
+/// ground                   LayerMask of what is considered ground
+
 /// Mouse Tracking Variables
-/// mouseLocation       Location of mouse
-/// armDirection        Direction of dwarf arms
-/// direcitonModifier   Modifies the arm direction based on the dwarf's direction
-/// dwarfArm            Transform of the dwarf's arm
-/// 
-/// Dwarf Movemement Variables
-/// allowMovement       Boolean determining if the dwarf can move
-/// onGround            Boolean determining if the dwarf is on ground
-/// isRocketJumping     Boolean determining if the dwarf is rocket jumping
-/// allowWallJump       Boolean determining if the dwarf can wall jump
-/// groundCheckRadius   Radius of OverlapCircle for checking if dwarf is touching the ground
-/// maxSpeed            Max velocity of the dwarf's movement
-/// airSpeed            Speed modifier of the dwarf while in air
-/// jumpForce           Force of the dwarf's jumps
-/// slideTime           How long the dwarf can slide down a wall while still being allowed to wall jump
-/// rb2d                RigidBody2d of the dwarf's body
-/// groundCheck         Transform position of OverlapCircle
-/// 
+/// mouseLocation            The mouse's current location
+/// armDirection             Direction of the dwarf's arm
+/// directionModifier        Modifies the direction of the arm based on which way the dwarf is facing
+/// dwarfArm                 Transform of the arm
+
+/// Dwarf Movement Variables
+/// allowMovement            Boolean determining if the dwarf can move
+/// onGround                 Boolean determining if the dwarf is on ground
+/// isRocketJumping          Boolean determining if the dwarf is rocket jumping
+/// allowWallJump            Boolean determining if the dwarf can wall jump
+/// groundCheckRadius        Radius of OverlapCircel for checking if the dwarf is touching ground
+/// maxSpeed                 Max velocity of the dwarf
+/// airSpeed                 Speed modifier when in the air
+/// jumpForce                Force applied to the dwarf when jumping
+/// slideTime                How long the dwarf can slide on a wall
+/// rb2d                     Rigidbody2D of the dwarf
+/// groundCheck              Transform position of OverlapCircle
+
 /// Dwarf Animation Variables
-/// mainAnimator        Reference to the main animator of the dwarf
-/// armAnimator         Reference to the animator of the dwarf's arm
-/// facingRight         Boolean determining if the dwarf is facing right or not
-/// movementSpeed       Current movement speed of the dwarf
-/// 
+/// mainAnimator             Reference to animator that controls the whole dwarf
+/// armAnimator              Reference to animator that controls the arm
+/// facingRight              Boolean determining if the dwarf is facing right or not
+/// movementSpeed            How fast the dwarf is moving
+
 /// Particle Systems
-/// explosionPS         Particle System of explosions
-/// cartridgePS         Particle System of cartridges
+/// explosionPS              Particle System of explosions
+/// cartridgePS              Particle System of cartridges
 /// 
 /// Author: Evan Funnell        (EVF)
 /// Editor: Eamonn McCormick    (EPM)
-/// Editor: Ryan Dykstra        (RJD)
 /// Editor: Eric Walker         (EW)
+/// Editor: Ryan Dykstra        (RJD)
+/// 
 
-public class DwarfController : MonoBehaviour {
-
-    //Punch speed + range
+public class DwarfController : MonoBehaviour
+{
+    //Punch Speed + Range
     public float punchRange = 20f;
     public float punchDelay = 0f;
 
-    //Explosion size + force
+    //Explosion Size + Force
     public float explosionRadius = 50f;
     public float explosionForce = 25f;
 
-    //Firing variables, raycasts and checks
-    public LayerMask ground;
+    //Firing Variables, Raycasts and Checks
     private float timeSinceFire;
     private RaycastHit2D hitCheck;
     private Ray2D dwarfPunch;
     private Transform dwarfPunchOrigin;
     private Vector2 explosionPos;
+    public LayerMask ground;
 
     //Mouse Tracking Variables
     private Vector3 mouseLocation;
@@ -95,13 +97,13 @@ public class DwarfController : MonoBehaviour {
     private Rigidbody2D rb2d;
     private Transform groundCheck;
 
-    //Dwarf animation variables
+    //Dwarf Animation Variables
     private Animator mainAnimator;
     private Animator armAnimator;
     private bool facingRight;
     private float movementSpeed;
 
-    //Particle systems
+    //Particle Systems
     public ParticleSystem explosionPS;
     public ParticleSystem cartridgePS;
 
@@ -112,7 +114,8 @@ public class DwarfController : MonoBehaviour {
     /// 2018-10-12  EVF     Initialized variables
     /// 2018-12-2   EPM     Added particle system instantiation
     /// 
-    void Start(){
+    void Start()
+    {
 
         //Let his punches leave his own collider
         Physics2D.queriesStartInColliders = false;
@@ -135,7 +138,7 @@ public class DwarfController : MonoBehaviour {
         explosionPS = Instantiate(explosionPS);
         cartridgePS = Instantiate(cartridgePS);
     }
-        
+
 
 
     /// <summary>
@@ -144,21 +147,21 @@ public class DwarfController : MonoBehaviour {
     /// 
     /// 2018-10-12  EVF     Added movement code
     /// 2018-11-7   EPM     Added mouse click code
-    /// 2018-12-14  RJD     Added movement code
+    /// 2018-11-20  RJD     Added wall jump code
     /// 
-    void Update() {
-
-        //Get movement speed from Input.GetAxis and update onGround if Dwarf is onGround
+    void Update()
+    {
+        //Calculate movement speed based on axis input
         movementSpeed = Input.GetAxis("Horizontal");
+        //Check if onGround using overlapCircle
         onGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, ground);
 
-        //If Dwarf is onGround, movement control is based on velocity
+        //If on ground, dwarf is controlled by velocity
         if (onGround)
         {
             rb2d.velocity = new Vector2(movementSpeed * maxSpeed, rb2d.velocity.y);
         }
-
-        //If in air, movement control is based on adding forces
+        //If in air, dwarf is controlled by adding forces
         else if (!onGround)
         {
             rb2d.AddForce(new Vector2(movementSpeed * airSpeed, 0), ForceMode2D.Impulse);
@@ -180,10 +183,10 @@ public class DwarfController : MonoBehaviour {
         armDirection = new Vector2(mouseLocation.x - transform.position.x, mouseLocation.y - transform.position.y) * directionModifier;
         dwarfArm.right = armDirection;
         //play arm animation on click
-        if (Input.GetMouseButtonUp(0)) {
+        if (Input.GetMouseButtonUp(0))
+        {
             armAnimator.Play("Dwarf_arm_blast_1");
         }
-        //armAnimator.SetBool("onClick", Input.GetMouseButtonUp(0));
 
         Debug.Log(explosionPS);
     }
@@ -193,26 +196,24 @@ public class DwarfController : MonoBehaviour {
     /// </summary>
     /// 
     /// 2018-10-12  EVF     Added ground check sphere
-    /// 2018-12-14  RJD     Tuned up wall jumping code
+    /// 2018-11-20  RJD     Added wall jump code
     /// 
     void FixedUpdate()
     {
-        //If the player jumps...
+        //If the player decides to jump...
         if (Input.GetButtonDown("Jump"))
         {
-            //If on ground, perfrom a simple jump by adding y force
+            //If grounded, apply a jump force
             if (onGround)
             {
                 //Set y velocity to 0 and add jumping force
                 rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
                 rb2d.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             }
-
-            //If performing a walljump, set velocity to 0 and add a force to impulse him off the wall
-            //depending facing right or left
+            //If wall jumping, set velocity to 0 and add a force to impulse dwarf off the wall
+            //depending on facing right or left
             else if (allowWallJump)
             {
-                //Set velocity to 0 and add a force to impulse him off the wall depending facing right or left
                 rb2d.velocity = Vector2.zero;
                 if (!facingRight)
                 {
@@ -225,9 +226,10 @@ public class DwarfController : MonoBehaviour {
                 allowWallJump = false;
             }
         }
-        
-        //Set the animator to make the dwarf run if its velocity is > 0
-        if (Mathf.Abs(rb2d.velocity.x) > 0.01f) {
+
+        //Animate the dwarf to run if x velocity is > 0
+        if (Mathf.Abs(rb2d.velocity.x) > 0.01f)
+        {
             mainAnimator.SetBool("isRunning", true);
         }
         else
@@ -235,7 +237,7 @@ public class DwarfController : MonoBehaviour {
             mainAnimator.SetBool("isRunning", false);
         }
 
-        //Flip the dwarf depending on the magnitude of x velocity
+        //Flip the dwarf depending on his x velocity
         if (rb2d.velocity.x < 0 && !facingRight)
         {
             Flip();
@@ -244,16 +246,6 @@ public class DwarfController : MonoBehaviour {
         {
             Flip();
         }
-    }
-
-    //Debug function to test OnGround check
-    void OnDrawGizmosSelected()
-    {
-        // Draw a yellow sphere at the transform's position
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(groundCheck.position, groundCheckRadius);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(explosionPos, explosionRadius);
     }
 
     /// <summary>
@@ -283,17 +275,24 @@ public class DwarfController : MonoBehaviour {
     /// 
     void Punch()
     {
+        //Dwarf is in the air
         onGround = false;
+        //Reset punch time
         timeSinceFire = 0f;
-        //reset our punch time
+
+        //Get location and direction of punch
         dwarfPunch.origin = dwarfPunchOrigin.position;
         dwarfPunch.direction = facingRight ? -armDirection : dwarfPunch.direction = armDirection;
-        //Get our location
+
+        //Raycast the punch and check if it hit something
         hitCheck = Physics2D.Raycast(dwarfPunch.origin, dwarfPunch.direction, punchRange);
         if (hitCheck.collider != null)
         {
+            //Set explosion point to the raycast's hit
             print("We've hit something");
             explosionPos = hitCheck.point;
+
+            //Get colliders in the explosion radius and apply explosion force to them
             Collider2D[] hitObjects = Physics2D.OverlapCircleAll(explosionPos, explosionRadius);
             foreach (Collider2D hit in hitObjects)
             {
@@ -311,6 +310,7 @@ public class DwarfController : MonoBehaviour {
     /// This function calculates the direction of force to be applied based on the explosions parameters. 
     /// It will send whichever rigidbody is supplied into the calculated direction at the specified force.
     /// </summary>
+    /// 
     /// <param name="expVictim">The Rigidbody 2D we wish to apply force to.</param>
     /// <param name="explosionForce">Desired strength of the explosion (a float).</param>
     /// <param name="explosionPos">The origin of the explosion (A vector2 location.)</param>
@@ -321,14 +321,15 @@ public class DwarfController : MonoBehaviour {
     /// 
     void DwarfExplode(Rigidbody2D expVictim, float explosionForce, Vector2 explosionPos, float explosionRadius)
     {
+        //Get direction that victim will be pushed by explosion
         Vector2 ExpDir = (Vector2)expVictim.transform.position - explosionPos;
         ExpDir = ExpDir.normalized;
+        //Get distance between victim and explosion
         float explosionDistance = Vector2.Distance(explosionPos, ExpDir);
         Debug.Log(explosionDistance);
         float explosionStrength = 1f;
-
+        //Set velocity of victim to direction times strength of explosion
         expVictim.velocity = (ExpDir * (explosionStrength * explosionForce));
-        //Tell the engine to simply shove them in our desired direction, no fuss.
 
         //play the particle effect
         //note: even though these PS's are part of the script, they do not move around with it, and must therefore be moved into
@@ -342,14 +343,14 @@ public class DwarfController : MonoBehaviour {
     /// <summary>
     /// Performs actions after a collision
     /// </summary>
+    /// 
     /// <param name="collision"> A collider </param>
     /// 
-    /// 2018-11-20  RJD     Added Wall-Jump Code
+    /// 2018-11-20 RJD      Added wall jump code
     /// 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        //If just jumped onto a wall, allow wall jump, set x velocity to 0, and start the
-        //CancelWallJump coroutine
+        //Allow dwarf to wall jump and set his x velocity to 0, then start the cancelWallJump coroutine
         if (collision.gameObject.tag == "Wall")
         {
             allowWallJump = true;
@@ -363,12 +364,14 @@ public class DwarfController : MonoBehaviour {
     /// <summary>
     /// Performs actions after ceasing contact with a collider
     /// </summary>
+    /// 
     /// <param name="collision"> A collider </param>
     /// 
-    /// 2018-11-20 RJD    Added wall jump code
+    /// 2018-11-20      Added wall jump code
     /// 
     void OnCollisionExit2D(Collision2D collision)
     {
+        //Disallow wall jump if dwarf is not touching a wall
         if (collision.gameObject.tag == "Wall")
             allowWallJump = false;
     }
@@ -376,10 +379,12 @@ public class DwarfController : MonoBehaviour {
     /// <summary>
     /// Coroutine to take away the ability to wall jump after sticking to a wall for a period of time
     /// </summary>
+    /// 
     /// <param name="slideTime"> The amount of time before wall jump is disabled </param>
+    /// 
     /// <returns> A WaitForSeconds() </returns>
     /// 
-    /// 2018-11-20 RJD     Added basic wall jump cancelling
+    /// 2018-11-20      Added basic wall jump cancelling
     /// 
     private IEnumerator cancelWallJump(float slideTime)
     {
