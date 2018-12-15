@@ -17,8 +17,7 @@ using UnityEngine;
 /// Author: Eric Stratechuk     (ES)
 /// 
 
-public class LevelTransition : MonoBehaviour
-{
+public class LevelTransition : MonoBehaviour {
     public GameObject sceneController;
     private SwitchToScene2 swapScript;
     public GameObject swapSceneObject;
@@ -32,8 +31,7 @@ public class LevelTransition : MonoBehaviour
     /// 
     /// 2018-12-14  ES
     /// 
-    void Start()
-    {
+    void Start() {
         sceneControllerScript = sceneController.GetComponent<SceneController>();
     }
 
@@ -43,19 +41,14 @@ public class LevelTransition : MonoBehaviour
     /// 
     /// 2018-12-14  ES
     /// 
-    void Update()
-    {
-        if (activeScene != "")
-        {
+    void Update() {
+        if (activeScene != "") {
             swapScript = GameObject.Find("EndOfLevelZone").GetComponent<SwitchToScene2>();
-            if (swapScript.switchScene)
-            {
+            if (swapScript.switchScene) {
                 Debug.Log("Switching to next scener");
 
                 sceneController.GetComponent<SceneController>().FadeAndLoadScene(swapScript.transitionToLevel);
             }
-
         }
-
     }
 }

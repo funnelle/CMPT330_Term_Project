@@ -17,7 +17,6 @@ using System;
 /// 
 
 public class SwitchToScene2 : MonoBehaviour {
-
     public bool switchScene = false;
     public String transitionToLevel;
 
@@ -40,10 +39,8 @@ public class SwitchToScene2 : MonoBehaviour {
     /// 
     /// 2018-12-14 ES
     /// 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.gameObject.tag == "Player") {
             Debug.Log("Entering New Scene");
             switchScene = true;       
         }

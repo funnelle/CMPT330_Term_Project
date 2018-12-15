@@ -188,7 +188,7 @@ public class DwarfController : MonoBehaviour
             armAnimator.Play("Dwarf_arm_blast_1");
         }
 
-        Debug.Log(explosionPS);
+        //Debug.Log(explosionPS);
     }
 
     /// <summary>
@@ -326,7 +326,7 @@ public class DwarfController : MonoBehaviour
         ExpDir = ExpDir.normalized;
         //Get distance between victim and explosion
         float explosionDistance = Vector2.Distance(explosionPos, ExpDir);
-        Debug.Log(explosionDistance);
+        //Debug.Log(explosionDistance);
         float explosionStrength = 1f;
         //Set velocity of victim to direction times strength of explosion
         expVictim.velocity = (ExpDir * (explosionStrength * explosionForce));

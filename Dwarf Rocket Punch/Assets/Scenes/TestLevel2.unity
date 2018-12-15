@@ -58573,6 +58573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   switchScene: 0
+  transitionToLevel: TestLevel
 --- !u!61 &1619967822
 BoxCollider2D:
   m_ObjectHideFlags: 0
