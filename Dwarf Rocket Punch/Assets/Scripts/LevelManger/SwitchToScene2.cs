@@ -11,6 +11,7 @@ using System;
 /// Variables
 /// 
 /// switchScene         Boolean that determines if the scene can be switched
+/// transitionToLevel   Level to transition to
 /// 
 /// Author: Eric Stratechuk     (ES)
 /// 
@@ -18,6 +19,7 @@ using System;
 public class SwitchToScene2 : MonoBehaviour {
 
     public bool switchScene = false;
+    public String transitionToLevel;
 
     /// <summary>
     /// Initialize switchScene to false
